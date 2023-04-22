@@ -1,11 +1,31 @@
+import getProjects from "@/services/get-projects";
 import { Task, Status } from "@/models/task";
 
 import MiniCard from "@/components/MiniCard"
 import Link from "next/link"
 
 import { FaHome } from "react-icons/fa"
+import { useState, useEffect } from "react";
 
 export default function Dashboard(props) {
+
+    const [title, setTitle] = useState("");
+
+    useEffect(() => {
+        const projectId = parseInt(localStorage.getItem('project'))
+        
+        getProjects().then((data) => {
+            console.log(data)
+            console.log(projectId)
+            const project = data.find((project) => project.id === projectId)
+            setTitle(project.title)
+
+        })
+
+
+
+    }, [])
+
 
 
     const task = new Task(1, "Título da tarefa1", "DESCRIÇÃO DA TAREFA", Status.ToDo);
@@ -25,7 +45,7 @@ export default function Dashboard(props) {
     return (
         <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-8 pr-8`}>
             <div className="flex flex-row w-full items-center justify-between space-y-4 border-2 border-gray-200 p-6">
-                <h1 className="text-4xl font-bold">Nome do Projeto</h1>
+                <h1 className="text-4xl font-bold">{title}</h1>
                 <Link href="/">
                     <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
                 </Link>

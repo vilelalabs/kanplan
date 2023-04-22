@@ -1,20 +1,13 @@
-import Project from "@/models/project"
 import Link from "next/link"
 import { useState,useEffect } from "react"
+import getProjects from "../services/get-projects"
 
 export default function Home() {
   const [projects, setProjects] = useState([])
 
-async function getProjects() {
-    const res = await fetch('/api/projects')
-    const data = await res.json()
-    return data
-  }
-
-
   useEffect(() => {
-    getProjects().then((projects) => {
-      setProjects(projects)
+    getProjects().then((data) => {
+      setProjects(data)
     })
 
   }, [])
@@ -30,7 +23,7 @@ async function getProjects() {
         <ul className=" text-2xl flex flex-col items-center justify-center space-y-4">
           {projects.map((project, key) => (
             <li key={key} className="flex items-center justify-center space-x-4">
-              <Link href={`/dashboard`}>
+              <Link href={`/dashboard`} onClick={() => localStorage.setItem('project', project.id)}>
                 {project.title}
               </Link>
             </li>

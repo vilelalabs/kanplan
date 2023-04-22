@@ -8,11 +8,11 @@ import { FaHome } from "react-icons/fa"
 export default function Dashboard(props) {
 
 
-    const task = new Task("Título da tarefa", "DESCRIÇÃO DA TAREFA", Status.ToDo);
-    const task2 = new Task("Título da tarefa2", "DESCRIÇÃO DA TAREFA", Status.InProgress);
-    const task3 = new Task("Título da tarefa3", "DESCRIÇÃO DA TAREFA", Status.Done);
-    const task5 = new Task("Título da tarefa5", "DESCRIÇÃO DA TAREFA", Status.ToDo);
-    const task4 = new Task("Título da tarefa4", "DESCRIÇÃO DA TAREFA", Status.InProgress);
+    const task = new Task(1, "Título da tarefa1", "DESCRIÇÃO DA TAREFA", Status.ToDo);
+    const task2 = new Task(2, "Título da tarefa2", "DESCRIÇÃO DA TAREFA", Status.InProgress);
+    const task3 = new Task(3, "Título da tarefa3", "DESCRIÇÃO DA TAREFA", Status.Done);
+    const task5 = new Task(4, "Título da tarefa5", "DESCRIÇÃO DA TAREFA", Status.ToDo);
+    const task4 = new Task(5, "Título da tarefa4", "DESCRIÇÃO DA TAREFA", Status.InProgress);
 
     const tasks = [task, task2, task3, task4, task5]
 

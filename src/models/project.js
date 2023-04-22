@@ -1,5 +1,5 @@
 
-export class Project{
+export default class Project{
     constructor(id, name, tasks){
         this.id = id;
         this.name = name;

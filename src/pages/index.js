@@ -1,8 +1,15 @@
+import Project from "@/models/project"
 import Link from "next/link"
 
 export default function Home() {
 
-  const projects = [ "Projeto 1", "Projeto 2", "Projeto 3"]
+  const project1 = new Project(1, "Projeto A", [])
+  const project2 = new Project(2, "Projeto B", [])
+  const project3 = new Project(3, "Projeto C", [])
+  const project4 = new Project(4, "Projeto X", [])
+
+  const projects = [project1, project2, project3, project4]
+
 
   return (
     <main
@@ -16,7 +23,7 @@ export default function Home() {
           {projects.map((project) => (
             <li className="flex items-center justify-center space-x-4">
               <Link href={`/dashboard`}>
-              {project}
+                {project.name}
               </Link>
             </li>
           ))}

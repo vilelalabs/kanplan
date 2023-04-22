@@ -1,4 +1,4 @@
-import { Task,Status } from "@/templates/task";
+import { Task, Status } from "@/models/task";
 
 import MiniCard from "@/components/MiniCard"
 import Link from "next/link"

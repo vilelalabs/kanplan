@@ -1,4 +1,4 @@
-import { updateTasks } from "@/services/tasks";
+import { updateTaskDescription } from "@/services/tasks";
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
 
@@ -8,7 +8,7 @@ export default function Card(props) {
     const [taskDescription, setTaskDescription] = useState(props.task.description);
 
     const handleSaveDescription = () => {
-        updateTasks(props.task.id, taskDescription)
+        updateTaskDescription(props.task.id, taskDescription)
         props.closeCard();
     }
     return (
@@ -31,7 +31,7 @@ export default function Card(props) {
             <div className="flex w-full justify-end">
                 <button className="bg-blue-800 hover:bg-blue-600 text-white font-bold
                                 py-2 px-4 rounded mt-2 w-24 justify-right"
-                                onClick={handleSaveDescription}
+                    onClick={handleSaveDescription}
                 >
                     Save
                 </button>

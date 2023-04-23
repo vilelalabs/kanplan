@@ -17,19 +17,34 @@ export async function postTasks(title, projectId) {
   return data
 }
 
-export async function updateTasks(id, description) {
+export async function updateTaskDescription(id, description) {
   const res = await fetch(`/api/tasks/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    body:  JSON.stringify({ description })
+    body: JSON.stringify({ description })
   })
 
   const data = await res.json()
 
   return data
 }
+
+export async function updateTaskStatus(id, status) {
+  const res = await fetch(`/api/tasks/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ status })
+  })
+
+  const data = await res.json()
+
+  return data
+}
+
 
 export async function deleteTasks(id) {
   const res = await fetch(`/api/tasks/${id}`, {

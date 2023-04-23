@@ -1,5 +1,5 @@
-import { getProjects, deleteProjects } from "@/services/projects";
-import {getTasks, postTasks, deleteTasks} from "@/services/tasks";
+import { getProjects, deleteProjects, updateProjectTitle } from "@/services/projects";
+import { getTasks, postTasks, deleteTasks, updateTaskStatus } from "@/services/tasks";
 import { Status } from "@/models/task";
 
 import MiniCard from "@/components/MiniCard"
@@ -19,7 +19,6 @@ export default function Dashboard(props) {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(0);
     const [showTaskCard, setShowTaskCard] = useState(false);
-
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
 
@@ -46,7 +45,7 @@ export default function Dashboard(props) {
     const cardsCol3 = tasks.filter((task) => task.status === Status.Done)
 
     const handleColClick = (taskId) => {
-        if(showTaskCard) return;
+        if (showTaskCard) return;
 
         setSelectedTask(taskId)
         setShowTaskCard(true)
@@ -57,17 +56,18 @@ export default function Dashboard(props) {
 
     }
 
+    const handleUpdateProjectTitle = (e) => {
+        const projectId = parseInt(localStorage.getItem('project'))
+        updateProjectTitle(projectId, title);
+    }
+
     const handleDeleteProject = () => {
 
         if (!confirm("Are you sure you want to delete this project?")) return
         const projectId = parseInt(localStorage.getItem('project'))
-        
+
         tasks.forEach((task) => {
-            deleteTasks(task.id).then(() => {
-                console.log("Task deleted")
-            }).catch((err) => {
-                console.log(err)
-            })
+            deleteTasks(task.id);
         })
         setTasks([])
 
@@ -78,21 +78,22 @@ export default function Dashboard(props) {
             console.log(err)
         })
     }
-    
+
     const handleAddNewTask = (e) => {
         if (e.key === "Enter") {
             const projectId = parseInt(localStorage.getItem('project'))
 
-            postTasks(newTaskTitle,projectId).then((data) => {
+            postTasks(newTaskTitle, projectId).then((data) => {
                 setTasks([...tasks, data])
             }).catch((err) => {
                 console.log(err)
             })
             setNewTaskTitle("")
-        }   
+        }
     }
-    
+
     const deleteTask = (taskId) => {
+        if (!confirm("Are you sure you want to delete this task?")) return
         deleteTasks(taskId).then(() => {
             const newTasks = tasks.filter((task) => task.id !== taskId)
             setTasks(newTasks)
@@ -101,10 +102,59 @@ export default function Dashboard(props) {
         })
     }
 
+    const moveTaskToRight = (taskId) => {
+        const task = tasks.find((task) => task.id === taskId)
+        let newStatus;
+        newStatus = (task.status === Status.ToDo) ? newStatus = Status.InProgress : newStatus = Status.Done
+        console.log(newStatus)
+        updateTaskStatus(taskId, newStatus).then((data) => {
+            const newTasks = tasks.map((task) => {
+                if (task.id === taskId) {
+                    return data
+                }
+                return task
+            })
+            setTasks(newTasks)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    const moveTaskToLeft = (taskId) => {
+        const task = tasks.find((task) => task.id === taskId)
+        let newStatus;
+        newStatus = (task.status === Status.Done) ? newStatus = Status.InProgress : newStatus = Status.ToDo
+        updateTaskStatus(taskId, newStatus).then((data) => {
+            const newTasks = tasks.map((task) => {
+                if (task.id === taskId) {
+                    return data
+                }
+                return task
+            })
+            setTasks(newTasks)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+
     return (
         <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-8 pr-8`}>
-            <div className="flex flex-row w-full items-center justify-between space-y-4 border-2 border-gray-200 p-6">
-                <h1 className="text-4xl font-bold">{title}</h1>
+            <div className="flex flex-row w-full items-center justify-between space-y-4  rounded-sm border-2 border-gray-200 p-6">
+                <input className="text-4xl font-bold bg-transparent p-2  mr-4 border-gray-200 w-full p-1 text-gray-100"
+                    type="text" placeholder="Name Your Project"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    onBlur={handleUpdateProjectTitle}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.target.blur()
+                        }
+                    }}
+
+
+                />
+
                 <div className="flex flex-row gap-8">
                     <div onClick={handleDeleteProject}>
                         <FaTrashAlt className="text-4xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out" />
@@ -117,8 +167,8 @@ export default function Dashboard(props) {
             </div>
             <div>
                 <ul className="flex flex-row justify-between space-x-4">
-                    <li className="flex flex-col w-full space-y-4 border-2 border-gray-200 p-4">
-                        <h2 className="text-center font-bold text-red-400">TO DO</h2>
+                    <li className="flex flex-col w-full space-y-4  border-gray-200 p-4">
+                        <h2 className="text-center font-bold text-orange-400">TO DO</h2>
                         <ul>
                             {cardsCol1.map((task, key) => (
                                 <li key={key} className="flex items-center justify-center p-2">
@@ -126,7 +176,8 @@ export default function Dashboard(props) {
                                         <MiniCard
                                             task={task}
                                             openTask={() => handleColClick(task.id)}
-                                            deleteTask={() => deleteTask(task.id)} />
+                                            deleteTask={() => deleteTask(task.id)}
+                                            moveTaskToRight={() => moveTaskToRight(task.id)} />
                                     </div>
                                 </li>
                             ))}
@@ -135,35 +186,39 @@ export default function Dashboard(props) {
                                 value={newTaskTitle}
                                 onChange={(e) => setNewTaskTitle(e.target.value)}
                                 onKeyDown={handleAddNewTask}
+
                             />
                         </ul>
 
                     </li>
-                    <li className="flex flex-col w-full space-y-4 border-2 border-gray-200 p-4">
+                    <li className="flex flex-col w-full space-y-4  border-gray-200 p-4">
                         <h2 className="text-center font-bold text-blue-400">IN PROGRESS</h2>
                         <ul>
                             {cardsCol2.map((task, key) => (
                                 <li key={key} className="flex items-center justify-center p-2">
-                                     <div>
+                                    <div>
                                         <MiniCard
                                             task={task}
                                             openTask={() => handleColClick(task.id)}
-                                            deleteTask={() => deleteTask(task.id)} />
+                                            deleteTask={() => deleteTask(task.id)}
+                                            moveTaskToLeft={() => moveTaskToLeft(task.id)}
+                                            moveTaskToRight={() => moveTaskToRight(task.id)} />
                                     </div>
                                 </li>
                             ))}
                         </ul>
                     </li>
-                    <li className="flex flex-col w-full space-y-4 border-2 border-gray-200 p-4">
+                    <li className="flex flex-col w-full space-y-4  border-gray-200 p-4">
                         <h2 className="text-center font-bold text-green-400" >DONE</h2>
                         <ul>
                             {cardsCol3.map((task, key) => (
                                 <li key={key} className="flex items-center justify-center p-2">
-                                     <div>
+                                    <div>
                                         <MiniCard
                                             task={task}
                                             openTask={() => handleColClick(task.id)}
-                                            deleteTask={() => deleteTask(task.id)} />
+                                            deleteTask={() => deleteTask(task.id)}
+                                            moveTaskToLeft={() => moveTaskToLeft(task.id)} />
                                     </div>
                                 </li>
                             ))}

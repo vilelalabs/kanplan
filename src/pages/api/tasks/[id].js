@@ -18,6 +18,7 @@ export default async function handler(req, res) {
 
     else if (req.method === 'PUT') {
         const { description } = req.body
+        const {status} = req.body
         if (req.body.description === undefined) req.body.description = ''
 
         try {
@@ -26,7 +27,8 @@ export default async function handler(req, res) {
                     id: parseInt(id)
                 },
                 data: {
-                    description: description
+                    description: description,
+                    status: status
                 }
             })
             res.status(200).json(updatedTask)

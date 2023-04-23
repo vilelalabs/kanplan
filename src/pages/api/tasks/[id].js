@@ -15,4 +15,25 @@ export default async function handler(req, res) {
 
         res.status(200).json(deletedTask)
     }
+
+    else if (req.method === 'PUT') {
+        const { description } = req.body
+        if (req.body.description === undefined) req.body.description = ''
+
+        try {
+            const updatedTask = await prisma.task.update({
+                where: {
+                    id: parseInt(id)
+                },
+                data: {
+                    description: description
+                }
+            })
+            res.status(200).json(updatedTask)
+
+        } catch (error) {
+            res.status(400).json({message: error.message})
+        }
+
+    }
 }

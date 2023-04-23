@@ -1,8 +1,16 @@
+import { updateTasks } from "@/services/tasks";
+import { useState } from "react";
 import { GrClose } from "react-icons/gr";
+
 
 export default function Card(props) {
 
+    const [taskDescription, setTaskDescription] = useState(props.task.description);
 
+    const handleSaveDescription = () => {
+        updateTasks(props.task.id, taskDescription)
+        props.closeCard();
+    }
     return (
         <div className="absolute inset-x-1/2 transform -translate-x-1/2
                         flex flex-col items-centerjustify-center
@@ -14,8 +22,20 @@ export default function Card(props) {
                     onClick={props.closeCard}
                 />
             </div>
-            <p className="text-lg font-normal mt-10"
-            > {props.task.description}</p>
+
+            <textarea className="text-lg h-32 font-normal mt-10 bg-transparent border-gray-200 w-full p-2 text-black"
+                type="text" placeholder="Insert Your description"
+                value={taskDescription}
+                onChange={(e) => setTaskDescription(e.target.value)}
+            />
+            <div className="flex w-full justify-end">
+                <button className="bg-blue-800 hover:bg-blue-600 text-white font-bold
+                                py-2 px-4 rounded mt-2 w-24 justify-right"
+                                onClick={handleSaveDescription}
+                >
+                    Save
+                </button>
+            </div>
         </div>
     );
 }

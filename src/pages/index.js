@@ -1,9 +1,11 @@
 import Link from "next/link"
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 import getProjects from "../services/get-projects"
+import postProjects from "@/services/post-projects"
 
 export default function Home() {
   const [projects, setProjects] = useState([])
+  const [newProjectTitle, setNewProjectTitle] = useState("")
 
   useEffect(() => {
     getProjects().then((data) => {
@@ -11,6 +13,18 @@ export default function Home() {
     })
 
   }, [])
+
+
+  const handleAddNewProject = (e) => {
+    if (e.key === "Enter") {
+      // Add new project to DB through API
+      postProjects(newProjectTitle).then((data) => {
+        setProjects([...projects, data])
+        setNewProjectTitle("")
+      })
+    }
+  }
+
 
   return (
     <main
@@ -28,6 +42,12 @@ export default function Home() {
               </Link>
             </li>
           ))}
+          <input className="text-center bg-transparent border-gray-200 p-1 text-gray-100"
+            type="text" placeholder="Create New Project"
+            value={newProjectTitle}
+            onChange={(e) => setNewProjectTitle(e.target.value)}
+            onKeyDown={handleAddNewProject}
+          />
 
         </ul>
       </div>

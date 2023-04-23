@@ -17,13 +17,13 @@ export async function postTasks(title, projectId) {
   return data
 }
 
-export async function updateTaskDescription(id, description) {
+export async function updateTask(id, title, description) {
   const res = await fetch(`/api/tasks/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ description })
+    body: JSON.stringify({ title, description })
   })
 
   const data = await res.json()

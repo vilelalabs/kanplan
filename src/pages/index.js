@@ -15,6 +15,8 @@ export default function Home() {
 
 
   const handleAddNewProject = (e) => {
+    if(newProjectTitle === "") return;
+    
     if (e.key === "Enter") {
       // Add new project to DB through API
       postProjects(newProjectTitle).then((data) => {

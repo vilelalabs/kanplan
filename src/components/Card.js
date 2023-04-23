@@ -1,4 +1,4 @@
-import { updateTaskDescription } from "@/services/tasks";
+import { updateTask } from "@/services/tasks";
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
 
@@ -6,9 +6,15 @@ import { GrClose } from "react-icons/gr";
 export default function Card(props) {
 
     const [taskDescription, setTaskDescription] = useState(props.task.description);
+    const [taskTitle, setTaskTitle] = useState(props.task.title);
 
-    const handleSaveDescription = () => {
-        updateTaskDescription(props.task.id, taskDescription)
+    const handleSaveChanges = () => {
+        if(taskTitle === ""){
+            alert("Please insert a title for your task");
+            return;
+        }
+
+        updateTask(props.task.id, taskTitle, taskDescription)
         props.closeCard();
     }
     return (
@@ -17,7 +23,12 @@ export default function Card(props) {
                         w-96 bg-gray-100 bg-opacity-95 text-black rounded-lg
                         p-10 m-10 shadow-md gap-4">
             <div>
-                <h3 className="text-lg font-bold ">{props.task.title}</h3>
+            <input className="text-lg font-bold bg-transparent p-2 w-full border-gray-200 text-black"
+                    type="text" placeholder="Name Your Task"
+                    value={taskTitle}
+                    onChange={(e) => setTaskTitle(e.target.value)}
+                />
+
                 <GrClose className="absolute top-4 right-4 text-2xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out"
                     onClick={props.closeCard}
                 />
@@ -31,7 +42,7 @@ export default function Card(props) {
             <div className="flex w-full justify-end">
                 <button className="bg-blue-800 hover:bg-blue-600 text-white font-bold
                                 py-2 px-4 rounded mt-2 w-24 justify-right"
-                    onClick={handleSaveDescription}
+                    onClick={handleSaveChanges}
                 >
                     Save
                 </button>

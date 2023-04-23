@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 export default function Dashboard(props) {
 
     const [title, setTitle] = useState("");
+    const [firstTitle, setFirstTitle] = useState("");
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(0);
     const [showTaskCard, setShowTaskCard] = useState(false);
@@ -28,6 +29,7 @@ export default function Dashboard(props) {
         getProjects().then((data) => {
             const project = data.find((project) => project.id === projectId)
             setTitle(project.title)
+            setFirstTitle(project.title)
         }).catch((err) => {
             console.log(err)
         })
@@ -57,6 +59,12 @@ export default function Dashboard(props) {
     }
 
     const handleUpdateProjectTitle = (e) => {
+        if(title === ""){
+            alert("Please insert a title for your project");
+            setTitle(firstTitle)
+            return;
+        }
+
         const projectId = parseInt(localStorage.getItem('project'))
         updateProjectTitle(projectId, title);
     }
@@ -151,8 +159,6 @@ export default function Dashboard(props) {
                             e.target.blur()
                         }
                     }}
-
-
                 />
 
                 <div className="flex flex-row gap-8">

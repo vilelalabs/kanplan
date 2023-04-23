@@ -29,8 +29,9 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center  space-y-16 p-24 `}
     >
-      <div>
+      <div className="flex flex-col items-center gap-2">
         <h1 className="text-6xl font-bold text-center"> KANPLAN </h1>
+        <p className="text-lg italic">"Experience minimalism in project management, tailored just for you."</p>
       </div>
       <div>
         <ul className=" text-2xl flex flex-col items-center justify-center space-y-4">

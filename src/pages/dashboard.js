@@ -38,7 +38,7 @@ export default function Dashboard(props) {
             setTasks(tasks)
         })
 
-    }, [])
+    }, [showTaskCard])
 
 
     const cardsCol1 = tasks.filter((task) => task.status === Status.ToDo)
@@ -46,6 +46,7 @@ export default function Dashboard(props) {
     const cardsCol3 = tasks.filter((task) => task.status === Status.Done)
 
     const handleColClick = (taskId) => {
+        if(showTaskCard) return;
 
         setSelectedTask(taskId)
         setShowTaskCard(true)
@@ -53,6 +54,7 @@ export default function Dashboard(props) {
 
     const handleCloseCard = () => {
         setShowTaskCard(false)
+
     }
 
     const handleDeleteProject = () => {
@@ -86,8 +88,6 @@ export default function Dashboard(props) {
             }).catch((err) => {
                 console.log(err)
             })
-
-            console.log(newTaskTitle)
             setNewTaskTitle("")
         }   
     }

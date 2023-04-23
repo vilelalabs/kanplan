@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import getProjects from "../services/get-projects"
-import postProjects from "@/services/post-projects"
+import {getProjects, postProjects} from "../services/projects"
 
 export default function Home() {
   const [projects, setProjects] = useState([])

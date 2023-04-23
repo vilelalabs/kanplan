@@ -21,6 +21,6 @@ export default async function handler(req, res) {
                 title: req.body.title
             }
         })
-        res.status(200).json(project)
+        res.status(201).json(project)
     }
 }

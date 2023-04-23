@@ -1,4 +1,4 @@
-import getProjects from "@/services/get-projects";
+import { getProjects, deleteProjects } from "@/services/projects";
 import { Status } from "@/models/task";
 
 import MiniCard from "@/components/MiniCard"
@@ -6,6 +6,9 @@ import Card from "@/components/Card";
 import Link from "next/link"
 
 import { FaHome } from "react-icons/fa"
+import { FaTrash } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
+
 import { useState, useEffect } from "react";
 import getTasks from "@/services/get-tasks";
 
@@ -23,6 +26,8 @@ export default function Dashboard(props) {
         getProjects().then((data) => {
             const project = data.find((project) => project.id === projectId)
             setTitle(project.title)
+        }).catch((err) => {
+            console.log(err)
         })
 
         getTasks().then((data) => {
@@ -47,14 +52,29 @@ export default function Dashboard(props) {
         setShowTaskCard(false)
     }
 
+    const handleDeleteProject = () => {
+        const projectId = parseInt( localStorage.getItem('project'))
+        deleteProjects(projectId).then(() => {
+            localStorage.removeItem('project')
+            window.location.href = "/"
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
 
     return (
         <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-8 pr-8`}>
             <div className="flex flex-row w-full items-center justify-between space-y-4 border-2 border-gray-200 p-6">
                 <h1 className="text-4xl font-bold">{title}</h1>
-                <Link href="/">
-                    <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
-                </Link>
+                <div className="flex flex-row gap-4">
+                    <Link href="/">
+                        <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
+                    </Link>
+                    <div onClick={handleDeleteProject}>
+                        <FaTrashAlt className="text-4xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out" />
+                    </div>
+                </div>
             </div>
             <div>
                 <ul className="flex flex-row justify-between space-x-4">

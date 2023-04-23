@@ -1,4 +1,5 @@
 import { getProjects, deleteProjects } from "@/services/projects";
+import {getTasks, postTasks, deleteTasks} from "@/services/tasks";
 import { Status } from "@/models/task";
 
 import MiniCard from "@/components/MiniCard"
@@ -6,11 +7,10 @@ import Card from "@/components/Card";
 import Link from "next/link"
 
 import { FaHome } from "react-icons/fa"
-import { FaTrash } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 
 import { useState, useEffect } from "react";
-import getTasks from "@/services/get-tasks";
+
 
 
 export default function Dashboard(props) {
@@ -19,6 +19,9 @@ export default function Dashboard(props) {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(0);
     const [showTaskCard, setShowTaskCard] = useState(false);
+
+    const [newTaskTitle, setNewTaskTitle] = useState("")
+
 
     useEffect(() => {
         const projectId = parseInt(localStorage.getItem('project'))
@@ -34,7 +37,6 @@ export default function Dashboard(props) {
             const tasks = data.filter((task) => task.projectId === projectId)
             setTasks(tasks)
         })
-
 
     }, [])
 
@@ -53,7 +55,19 @@ export default function Dashboard(props) {
     }
 
     const handleDeleteProject = () => {
-        const projectId = parseInt( localStorage.getItem('project'))
+
+        if (!confirm("Are you sure you want to delete this project?")) return
+        const projectId = parseInt(localStorage.getItem('project'))
+        
+        tasks.forEach((task) => {
+            deleteTasks(task.id).then(() => {
+                console.log("Task deleted")
+            }).catch((err) => {
+                console.log(err)
+            })
+        })
+        setTasks([])
+
         deleteProjects(projectId).then(() => {
             localStorage.removeItem('project')
             window.location.href = "/"
@@ -61,19 +75,34 @@ export default function Dashboard(props) {
             console.log(err)
         })
     }
+    
+    const handleAddNewTask = (e) => {
+        if (e.key === "Enter") {
+            const projectId = parseInt(localStorage.getItem('project'))
 
+            postTasks(newTaskTitle,projectId).then((data) => {
+                setTasks([...tasks, data])
+            }).catch((err) => {
+                console.log(err)
+            })
 
+            console.log(newTaskTitle)
+            setNewTaskTitle("")
+        }   
+    }
+    
     return (
         <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-8 pr-8`}>
             <div className="flex flex-row w-full items-center justify-between space-y-4 border-2 border-gray-200 p-6">
                 <h1 className="text-4xl font-bold">{title}</h1>
-                <div className="flex flex-row gap-4">
-                    <Link href="/">
-                        <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
-                    </Link>
+                <div className="flex flex-row gap-8">
                     <div onClick={handleDeleteProject}>
                         <FaTrashAlt className="text-4xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out" />
                     </div>
+                    <Link href="/">
+                        <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
+                    </Link>
+
                 </div>
             </div>
             <div>
@@ -88,6 +117,12 @@ export default function Dashboard(props) {
                                     </div>
                                 </li>
                             ))}
+                            <input className="text-center bg-transparent border-gray-200 w-full p-1 text-gray-100"
+                                type="text" placeholder="Create New Task"
+                                value={newTaskTitle}
+                                onChange={(e) => setNewTaskTitle(e.target.value)}
+                                onKeyDown={handleAddNewTask}
+                            />
                         </ul>
 
                     </li>

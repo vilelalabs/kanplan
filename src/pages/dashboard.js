@@ -46,6 +46,7 @@ export default function Dashboard(props) {
     const cardsCol3 = tasks.filter((task) => task.status === Status.Done)
 
     const handleColClick = (taskId) => {
+
         setSelectedTask(taskId)
         setShowTaskCard(true)
     }
@@ -91,6 +92,15 @@ export default function Dashboard(props) {
         }   
     }
     
+    const deleteTask = (taskId) => {
+        deleteTasks(taskId).then(() => {
+            const newTasks = tasks.filter((task) => task.id !== taskId)
+            setTasks(newTasks)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     return (
         <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-8 pr-8`}>
             <div className="flex flex-row w-full items-center justify-between space-y-4 border-2 border-gray-200 p-6">
@@ -112,8 +122,11 @@ export default function Dashboard(props) {
                         <ul>
                             {cardsCol1.map((task, key) => (
                                 <li key={key} className="flex items-center justify-center p-2">
-                                    <div onClick={() => handleColClick(task.id)} >
-                                        <MiniCard task={task} />
+                                    <div>
+                                        <MiniCard
+                                            task={task}
+                                            openTask={() => handleColClick(task.id)}
+                                            deleteTask={() => deleteTask(task.id)} />
                                     </div>
                                 </li>
                             ))}
@@ -131,8 +144,11 @@ export default function Dashboard(props) {
                         <ul>
                             {cardsCol2.map((task, key) => (
                                 <li key={key} className="flex items-center justify-center p-2">
-                                    <div onClick={() => handleColClick(task.id)} >
-                                        <MiniCard task={task} />
+                                     <div>
+                                        <MiniCard
+                                            task={task}
+                                            openTask={() => handleColClick(task.id)}
+                                            deleteTask={() => deleteTask(task.id)} />
                                     </div>
                                 </li>
                             ))}
@@ -143,8 +159,11 @@ export default function Dashboard(props) {
                         <ul>
                             {cardsCol3.map((task, key) => (
                                 <li key={key} className="flex items-center justify-center p-2">
-                                    <div onClick={() => handleColClick(task.id)} >
-                                        <MiniCard task={task} />
+                                     <div>
+                                        <MiniCard
+                                            task={task}
+                                            openTask={() => handleColClick(task.id)}
+                                            deleteTask={() => deleteTask(task.id)} />
                                     </div>
                                 </li>
                             ))}

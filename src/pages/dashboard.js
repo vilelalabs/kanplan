@@ -147,9 +147,9 @@ export default function Dashboard(props) {
 
 
     return (
-        <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-8 pr-8`}>
-            <div className="flex flex-row w-full items-center justify-between space-y-4  rounded-sm border-2 border-gray-200 p-6">
-                <input className="text-4xl font-bold bg-transparent p-2  mr-4 border-gray-200 w-full p-1 text-gray-100"
+        <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-4 pr-4`}>
+            <div className="flex flex-row w-full items-center justify-between gap-4 runded-sm border-2 border-gray-200 p-6">
+                <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
                     type="text" placeholder="Name Your Project"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
@@ -172,8 +172,8 @@ export default function Dashboard(props) {
                 </div>
             </div>
             <div>
-                <ul className="flex flex-row justify-between space-x-4">
-                    <li className="flex flex-col w-full space-y-4  border-gray-200 p-4">
+                <ul className="flex lg:flex-row flex-col justify-between gap-4">
+                    <li className="flex flex-col w-full space-y-4 p-4">
                         <h2 className="text-center font-bold text-orange-400">TO DO</h2>
                         <ul>
                             {cardsCol1.map((task, key) => (
@@ -197,7 +197,7 @@ export default function Dashboard(props) {
                         </ul>
 
                     </li>
-                    <li className="flex flex-col w-full space-y-4  border-gray-200 p-4">
+                    <li className="flex flex-col w-full space-y-4 p-4">
                         <h2 className="text-center font-bold text-blue-400">IN PROGRESS</h2>
                         <ul>
                             {cardsCol2.map((task, key) => (
@@ -214,7 +214,7 @@ export default function Dashboard(props) {
                             ))}
                         </ul>
                     </li>
-                    <li className="flex flex-col w-full space-y-4  border-gray-200 p-4">
+                    <li className="flex flex-col w-full space-y-4 p-4">
                         <h2 className="text-center font-bold text-green-400" >DONE</h2>
                         <ul>
                             {cardsCol3.map((task, key) => (
@@ -231,7 +231,6 @@ export default function Dashboard(props) {
                         </ul>
                     </li>
                 </ul>
-
             </div>
 
             {showTaskCard && <Card closeCard={handleCloseCard} task={tasks.find((task) => task.id === selectedTask)} />}

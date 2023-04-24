@@ -9,13 +9,16 @@ export default function Card(props) {
     const [taskTitle, setTaskTitle] = useState(props.task.title);
 
     const handleSaveChanges = () => {
-        if(taskTitle === ""){
+        if (taskTitle === "") {
             alert("Please insert a title for your task");
             return;
         }
 
-        updateTask(props.task.id, taskTitle, taskDescription)
-        props.closeCard();
+        updateTask(props.task.id, taskTitle, taskDescription).then((data) => {
+            props.closeCard();
+        }).catch((err) => {
+            console.log(err);
+        })
     }
     return (
         <div className="absolute inset-x-1/2 transform -translate-x-1/2
@@ -23,7 +26,7 @@ export default function Card(props) {
                         w-96 bg-gray-100 bg-opacity-95 text-black rounded-lg
                         p-10 m-10 shadow-md gap-4">
             <div>
-            <input className="text-lg font-bold bg-transparent p-2 w-full border-gray-200 text-black"
+                <input className="text-lg font-bold bg-transparent p-2 w-full border-gray-200 text-black"
                     type="text" placeholder="Name Your Task"
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}

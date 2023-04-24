@@ -34,7 +34,6 @@ export async function deleteProjects(id) {
   const res = await fetch(`/api/projects/${id}`, {
     method: 'DELETE'
   })
-   
   const data = await res.json()
   return data
 }

@@ -88,6 +88,8 @@ export default function Dashboard(props) {
     }
 
     const handleAddNewTask = (e) => {
+        if (newTaskTitle === "") return;
+
         if (e.key === "Enter") {
             const projectId = parseInt(localStorage.getItem('project'))
 
@@ -192,6 +194,7 @@ export default function Dashboard(props) {
                                 value={newTaskTitle}
                                 onChange={(e) => setNewTaskTitle(e.target.value)}
                                 onKeyDown={handleAddNewTask}
+                                onBlur={() => setNewTaskTitle("")}
 
                             />
                         </ul>

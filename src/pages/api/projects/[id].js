@@ -5,7 +5,6 @@ const prisma = new PrismaClient()
 
 export default async function handler(req, res) {
     const { id } = req.query
-    const { title } = req.body
 
     if (req.method === 'DELETE') {
         try {
@@ -22,6 +21,7 @@ export default async function handler(req, res) {
     }
 
     else if(req.method === 'PUT') {
+        const { title } = req.body
         try {
             const updatedProject = await prisma.project.update({
                 where: {

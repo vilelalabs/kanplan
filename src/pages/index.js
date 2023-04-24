@@ -44,7 +44,7 @@ export default function Home() {
               </Link>
             </li>
           ))}
-          <input className="text-center bg-transparent border-gray-200 pt-2 text-gray-100"
+          <input className="text-center bg-transparent border-gray-200 text-gray-100"
             type="text" placeholder="Name Your New Project"
             value={newProjectTitle}
             onChange={(e) => setNewProjectTitle(e.target.value)}

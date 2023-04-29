@@ -8,7 +8,7 @@ import { FaArrowLeft } from "react-icons/fa";
 
 export default function MiniCard(props) {
 
-    const TITLE_MAX_LENGHT = 18;
+    const TITLE_MAX_LENGHT = 17;
 
     const title = props.task.title
     const status = props.task.status

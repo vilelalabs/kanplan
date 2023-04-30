@@ -52,7 +52,7 @@ export default function Login() {
                 {/*form*/}
                 <form className="flex flex-col gap-5" onSubmit={formik.handleSubmit}>
                     <h1 className="text-2xl font-bold text-center"> Dive into your projects </h1>
-                    <div className={styles.input_group}>
+                    <div className={`${styles.input_group} ${formik.errors.email && formik.touched.email?'border-rose-600':''}`}>
                         <input
                             type="email"
                             name="email"
@@ -64,9 +64,8 @@ export default function Login() {
                             <HiAtSymbol size={25} />
                         </span>
                     </div>
-                    {formik.errors.email && formik.touched.email? <span className="text-red-500 text-sm">{formik.errors.email}</span> : null}
-                    <div className={styles.input_group}>
-                        <input
+                    {/* {formik.errors.email && formik.touched.email? <span className="text-red-500 text-sm">{formik.errors.email}</span> : null} */}
+                    <div className={`${styles.input_group} ${formik.errors.password && formik.touched.password?'border-rose-600':''}`}>                        <input
                             type={showPassword ? "text" : "password"}
                             name="password"
                             placeholder="password"
@@ -79,7 +78,7 @@ export default function Login() {
                             <HiFingerPrint size={25} />
                         </span>
                     </div>
-                    {formik.errors.password && formik.touched.password? <span className="text-red-500 text-sm">{formik.errors.password}</span> : null}
+                    {/* {formik.errors.password && formik.touched.password? <span className="text-red-500 text-sm">{formik.errors.password}</span> : null} */}
                     {/*login buttons*/}
                     <div className="input-button">
                         <button type="submit" className={styles.button}>
@@ -104,4 +103,4 @@ export default function Login() {
 
 
 
-// follow tutorial: https://www.youtube.com/watch?v=t0Fs0NO78X8 starting at 52:04 minutes
+// follow tutorial: https://www.youtube.com/watch?v=t0Fs0NO78X8 starting at 1:53:40 minutes

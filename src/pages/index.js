@@ -4,14 +4,18 @@ import { useState, useEffect } from "react"
 import { getProjects, postProjects } from "../services/projects"
 import Header from "@/components/Header"
 
+import { useSession, signOut} from "next-auth/react"
+
 export default function Home() {
-  const [session, setSession] = useState(false)
+  const {data: session} = useSession();
+  
+  
   return (
     <div>
       <Head>
         <title>Kanplan | Home</title>
       </Head>
-      {session?User():Guest()}
+      {session?<User session={session}/>:<Guest />}
     </div>
   )
 }
@@ -29,7 +33,7 @@ function Guest() {
   )
 }
 //Authorized User
-function User() {
+function User({session}) {
   const [projects, setProjects] = useState([])
   const [newProjectTitle, setNewProjectTitle] = useState("")
 
@@ -53,6 +57,10 @@ function User() {
     }
   }
 
+  async function handleSignOut(){
+    signOut()
+  }
+
   return (
     <div>
       <Head>
@@ -61,12 +69,12 @@ function User() {
       <div className="container mx-auto text-center py-10">
         <h3 className="text-4xl font-bold">Auth User Homepage</h3>
         <div className="details">
-          <h5>Unknown</h5>
-          <h5>Unknown</h5>
+          <h5>{session.user.name}</h5>
+          <h5>{session.user.email}</h5>
         </div>
 
         <div className="flex justify-center">
-          <button className="mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50">Sign Out</button>
+          <button className="mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
         </div>
         <div className="flex justify-center">
           <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>

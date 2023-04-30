@@ -18,6 +18,10 @@ async function handleGoogleSignin() {
     signIn('google', { callbackUrl: 'http://localhost:3000' })
 }
 
+async function handleGithubSignin() {
+    signIn('github', { callbackUrl: 'http://localhost:3000' })
+}
+
     return (
         <Layout>
             <Head>
@@ -64,7 +68,7 @@ async function handleGoogleSignin() {
                         <button type="button" className={styles.button_custom} onClick={handleGoogleSignin}>Sign in with Google <Image src={'/assets/google.svg'} width={20} height={20} alt={'google logo'} /></button>
                     </div>
                     <div className="input-button">
-                        <button type="button" className={styles.button_custom}>Sign in with Github <Image src={'/assets/github.svg'} width={25} height={25} alt={'google logo'} /></button>
+                        <button type="button" className={styles.button_custom} onClick={handleGithubSignin}>Sign in with Github <Image src={'/assets/github.svg'} width={25} height={25} alt={'google logo'} /></button>
                     </div>
                 </form>
                 {/*bottom*/}

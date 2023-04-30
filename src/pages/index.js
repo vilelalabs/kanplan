@@ -4,18 +4,21 @@ import { useState, useEffect } from "react"
 import { getProjects, postProjects } from "../services/projects"
 import Header from "@/components/Header"
 
-import { useSession, signOut} from "next-auth/react"
+import { getSession, useSession, signOut } from "next-auth/react"
 
 export default function Home() {
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   
-  
+  async function handleSignOut() {
+    signOut()
+  }
+
   return (
     <div>
       <Head>
         <title>Kanplan | Home</title>
       </Head>
-      {session?<User session={session}/>:<Guest />}
+      {session ? <User session={session} handleSignOut={handleSignOut} /> : <Guest />}
     </div>
   )
 }
@@ -33,7 +36,7 @@ function Guest() {
   )
 }
 //Authorized User
-function User({session}) {
+function User({ session, handleSignOut }) {
   const [projects, setProjects] = useState([])
   const [newProjectTitle, setNewProjectTitle] = useState("")
 
@@ -55,10 +58,6 @@ function User({session}) {
         setNewProjectTitle("")
       })
     }
-  }
-
-  async function handleSignOut(){
-    signOut()
   }
 
   return (
@@ -102,4 +101,20 @@ function User({session}) {
       </main>
     </div>
   )
+}
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req })
+
+  if (!session) return {
+    redirect: {
+      destination: '/login',
+      permanent: false
+    }
+  }
+
+  return {
+    props: { session }
+  }
+
 }

@@ -104,3 +104,11 @@ export default function Login() {
 
 
 // follow tutorial: https://www.youtube.com/watch?v=t0Fs0NO78X8 starting at 1:53:40 minutes
+
+//está sendo usado database Mongo, porém utilizareo o Postgres com o Prisma (https://authjs.dev/reference/adapter/prisma)
+// alguns videos para essa integração:
+// https://www.youtube.com/watch?v=zB7u1r0tc6o&pp=ygUjdXNpbmcgcHJvc21hIGFkYXB0ZXIgd290aCBuZXh0LmF1dGg%3D
+// https://www.youtube.com/watch?v=vo2uq1cJV6w&pp=ygUjdXNpbmcgcHJvc21hIGFkYXB0ZXIgd290aCBuZXh0LmF1dGg%3D
+// (3 minutos?)https://www.youtube.com/watch?v=VputqwS4btU&pp=ygUjdXNpbmcgcHJvc21hIGFkYXB0ZXIgd290aCBuZXh0LmF1dGg%3D
+
+

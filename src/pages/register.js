@@ -9,8 +9,11 @@ import { HiOutlineUser, HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useFormik } from "formik";
 import {registerValidate} from "../lib/validate";
 
+import { useRouter } from "next/router";
+
 export default function Register() {
     const [showPassword, setShowPassword] = useState({ password: false, cpassword: false });
+    const router = useRouter();
 
     const formik = useFormik({
         initialValues: {
@@ -24,7 +27,20 @@ export default function Register() {
     })
 
     async function onSubmit(values) {
-        console.log(values)
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+        }
+        const response = await fetch("/api/auth/signup", options)
+        const data = await response.json()
+        console.log(response.ok)
+        if(response.ok){
+            router.push("/login")
+        }
+
     }
 
     return (

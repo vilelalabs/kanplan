@@ -14,8 +14,11 @@ import { signIn, signOut } from "next-auth/react"
 import { useFormik } from "formik";
 import  login_validate from "../lib/validate";
 
+import { useRouter } from "next/router";
+
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter()
 
     //formik hook
     const formik = useFormik({
@@ -28,7 +31,17 @@ export default function Login() {
     })
 
     async function onSubmit(values) {
-        console.log(values)
+        const status = await signIn('credentials', {
+            redirect: false,
+            email: values.email,
+            password: values.password,
+              callbackUrl: '/'
+        })
+
+        if(status.ok){
+            console.log("OK")
+            router.push(status.url)
+        }
     }
 
 

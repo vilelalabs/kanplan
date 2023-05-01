@@ -8,7 +8,7 @@ import { getSession, useSession, signOut } from "next-auth/react"
 
 export default function Home() {
   const { data: session } = useSession();
-  
+
   async function handleSignOut() {
     signOut()
   }
@@ -106,10 +106,12 @@ function User({ session, handleSignOut }) {
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req })
 
-  if (!session) return {
-    redirect: {
-      destination: '/login',
-      permanent: false
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
     }
   }
 

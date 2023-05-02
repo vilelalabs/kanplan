@@ -5,7 +5,6 @@ import { getProjects, postProjects } from "../services/projects"
 import Header from "@/components/Header"
 
 import { getSession, useSession, signOut } from "next-auth/react"
-import Dashboard from "./dashboard"
 
 export default function Home() {
   const { data: session } = useSession();
@@ -67,6 +66,7 @@ function User({ session, handleSignOut }) {
       </Head>
 
       <div className="flex justify-between items-center text-center mx-4 py-2">
+      <Link href={'/'}><img src='/assets/logo.png' className="w-35 h-20" /></Link>
         <div className="flex flex-row items-center">
         <div className="details flex flex-col md:flex-row gap-2">
           <h5>Hi, {session.user.name}!</h5>

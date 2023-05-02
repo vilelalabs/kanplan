@@ -11,9 +11,12 @@ import { FaTrashAlt } from "react-icons/fa";
 
 import { useState, useEffect } from "react";
 
+import { getSession, useSession } from "next-auth/react"
 
+export default function Dashboard() {
 
-export default function Dashboard(props) {
+    const { data: session } = useSession();
+    const userEmail = session.user.email;
 
     const [title, setTitle] = useState("");
     const [firstTitle, setFirstTitle] = useState("");
@@ -22,24 +25,29 @@ export default function Dashboard(props) {
     const [showTaskCard, setShowTaskCard] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
+    const [projectId,setProjectId] = useState(0)
+
 
     useEffect(() => {
-        const projectId = parseInt(localStorage.getItem('project'))
+        getProjects(userEmail).then((data) => {
+            const project = data[0]
+            setProjectId(project.id)
 
-        getProjects().then((data) => {
-            const project = data.find((project) => project.id === projectId)
             setTitle(project.title)
             setFirstTitle(project.title)
+
         }).catch((err) => {
             console.log(err)
         })
 
+    }, [showTaskCard])
+
+    useEffect(() => {
         getTasks().then((data) => {
             const tasks = data.filter((task) => task.projectId === projectId)
             setTasks(tasks)
         })
-
-    }, [showTaskCard])
+    },[projectId,showTaskCard])
 
 
     const cardsCol1 = tasks.filter((task) => task.status === Status.ToDo)
@@ -59,20 +67,18 @@ export default function Dashboard(props) {
     }
 
     const handleUpdateProjectTitle = (e) => {
-        if(title === ""){
+        if (title === "") {
             alert("Please insert a title for your project");
             setTitle(firstTitle)
             return;
         }
 
-        const projectId = parseInt(localStorage.getItem('project'))
         updateProjectTitle(projectId, title);
     }
 
     const handleDeleteProject = () => {
 
         if (!confirm("Are you sure you want to delete this project?")) return
-        const projectId = parseInt(localStorage.getItem('project'))
 
         tasks.forEach((task) => {
             deleteTasks(task.id);
@@ -80,7 +86,6 @@ export default function Dashboard(props) {
         setTasks([])
 
         deleteProjects(projectId).then(() => {
-            localStorage.removeItem('project')
             window.location.href = "/"
         }).catch((err) => {
             console.log(err)
@@ -91,7 +96,6 @@ export default function Dashboard(props) {
         if (newTaskTitle === "") return;
 
         if (e.key === "Enter") {
-            const projectId = parseInt(localStorage.getItem('project'))
 
             postTasks(newTaskTitle, projectId).then((data) => {
                 setTasks([...tasks, data])
@@ -243,4 +247,20 @@ export default function Dashboard(props) {
 
         </main>
     )
+}
+
+
+export async function getServerSideProps(req) {
+    const session = await getSession(req)
+    if (!session) {
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: { session },
+    }
 }

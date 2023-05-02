@@ -5,6 +5,7 @@ import { getProjects, postProjects } from "../services/projects"
 import Header from "@/components/Header"
 
 import { getSession, useSession, signOut } from "next-auth/react"
+import Dashboard from "./dashboard"
 
 export default function Home() {
   const { data: session } = useSession();
@@ -41,7 +42,7 @@ function User({ session, handleSignOut }) {
   const [newProjectTitle, setNewProjectTitle] = useState("")
 
   useEffect(() => {
-    getProjects().then((data) => {
+    getProjects(session.user.email).then((data) => {
       setProjects(data)
     })
 
@@ -52,8 +53,7 @@ function User({ session, handleSignOut }) {
     if (newProjectTitle === "") return;
 
     if (e.key === "Enter") {
-      // Add new project to DB through API
-      postProjects(newProjectTitle).then((data) => {
+      postProjects(newProjectTitle, session.user.email).then((data) => {
         setProjects([...projects, data])
         setNewProjectTitle("")
       })
@@ -85,7 +85,7 @@ function User({ session, handleSignOut }) {
           <ul className=" text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
               <li key={key} className="flex items-center justify-center space-x-4">
-                <Link href={`/dashboard`} onClick={() => localStorage.setItem('project', project.id)}>
+                <Link href={`/dashboard`}>
                   {project.title}
                 </Link>
               </li>
@@ -98,6 +98,7 @@ function User({ session, handleSignOut }) {
             />
           </ul>
         </div>
+        {/* <Dashboard userEmail={session.user.email} /> TODO: show in different page (/dashboard) */}
       </main>
     </div>
   )

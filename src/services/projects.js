@@ -1,18 +1,25 @@
 
-export async function getProjects() {
-    const res = await fetch('/api/projects')
-    const data = await res.json()
-    return data
-  }
+export async function getProjects(email) {
+  const res = await fetch(`/api/projects?`,{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email })
+  })
+  const data = await res.json()
+  return data
+}
 
-  
-export async function postProjects(title) {
+
+export async function postProjects(title, email) {
+
   const res = await fetch('/api/projects', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ title })
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ title, email })
   })
   const data = await res.json()
   return data

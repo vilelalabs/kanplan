@@ -32,7 +32,7 @@
     color : rgb(91, 24, 206);
 }
 
-.input_text:not([type=email]) ~ span:hover *{
+.input_text:is([type=password]) ~ span:hover *{
     color : rgb(91, 24, 206);
     cursor: pointer;
 }

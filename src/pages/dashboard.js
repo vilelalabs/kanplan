@@ -27,11 +27,12 @@ export default function Dashboard() {
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
     const [projectId,setProjectId] = useState(0)
+    const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
 
 
     useEffect(() => {
         getProjects(userEmail).then((data) => {
-            const project = data[0]
+            const project = data[selectedProjectIndex]
             setProjectId(project.id)
 
             setTitle(project.title)
@@ -162,9 +163,9 @@ export default function Dashboard() {
                 <title>Kanplan | Dashboard</title>
             </Head>
 <div className="flex justify-between items-center text-center mx-4 py-2">
-        <h3 className="text-4xl font-bold">KANPLAN</h3>
+<Link href={'/'}><img src='/assets/logo.png' className="w-35 h-20" /></Link>
         <div className="flex flex-row items-center">
-        <div className="details flex flex-row gap-2">
+        <div className="details flex flex-col md:flex-row gap-2">
           <h5>Hi, {session.user.name}!</h5>
           <h5>({session.user.email})</h5>
         </div>

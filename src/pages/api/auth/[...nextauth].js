@@ -11,8 +11,12 @@ import { prisma } from "@/services/prismaClient";
 import { compare } from "bcryptjs";
 
 export default NextAuth({
-    //adapter: PrismaAdapter(prisma),
-    providers:[
+    session: {
+        strategy: "jwt",
+        maxAge: 3000,
+    },
+    adapter: PrismaAdapter(prisma),
+    providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
             clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET
@@ -23,19 +27,19 @@ export default NextAuth({
         }),
         CredentialsProvider({
             name: 'Credentials',
-            async authorize(credentials,req) { // runs when successfully authorized
+            async authorize(credentials, req) { // runs when successfully authorized
                 const result = await prisma.user.findUnique({
                     where: {
                         email: credentials.email
                     }
                 })
-                if(!result) {
+                if (!result) {
                     throw new Error("No user found with this email. Please sign up first.")
                 }
 
                 const isPasswordValid = await compare(credentials.password, result.password)
 
-                if(!isPasswordValid || result.email !== credentials.email) {
+                if (!isPasswordValid || result.email !== credentials.email) {
                     throw new Error("Invalid credentials. Please try again.")
                 }
 

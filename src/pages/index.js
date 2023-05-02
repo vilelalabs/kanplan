@@ -65,19 +65,22 @@ function User({ session, handleSignOut }) {
       <Head>
         <title>Kanplan | Home</title>
       </Head>
-      <div className="container mx-auto text-center py-10">
-        <h3 className="text-4xl font-bold">Auth User Homepage</h3>
-        <div className="details">
-          <h5>{session.user.name}</h5>
-          <h5>{session.user.email}</h5>
+
+      <div className="flex justify-between items-center text-center mx-4 py-2">
+        <h3 className="text-4xl font-bold">KANPLAN</h3>
+        <div className="flex flex-row items-center">
+        <div className="details flex flex-row gap-2">
+          <h5>Hi, {session.user.name}!</h5>
+          <h5>({session.user.email})</h5>
         </div>
 
         <div className="flex justify-center">
-          <button className="mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
+          <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
         </div>
-        <div className="flex justify-center">
+        </div>
+        {/* <div className="flex justify-center">
           <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>
-        </div>
+        </div> */}
       </div>
       <main className="flex min-h-screen flex-col items-center space-y-16 p-24">
         <Header />

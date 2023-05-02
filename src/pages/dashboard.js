@@ -11,7 +11,8 @@ import { FaTrashAlt } from "react-icons/fa";
 
 import { useState, useEffect } from "react";
 
-import { getSession, useSession } from "next-auth/react"
+import { getSession, useSession, signOut } from "next-auth/react"
+import Head from "next/head";
 
 export default function Dashboard() {
 
@@ -151,8 +152,31 @@ export default function Dashboard() {
         })
     }
 
+    function handleSignOut(){
+        signOut()
+    }
 
     return (
+        <div>
+            <Head>
+                <title>Kanplan | Dashboard</title>
+            </Head>
+<div className="flex justify-between items-center text-center mx-4 py-2">
+        <h3 className="text-4xl font-bold">KANPLAN</h3>
+        <div className="flex flex-row items-center">
+        <div className="details flex flex-row gap-2">
+          <h5>Hi, {session.user.name}!</h5>
+          <h5>({session.user.email})</h5>
+        </div>
+
+        <div className="flex justify-center">
+          <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
+        </div>
+        </div>
+        {/* <div className="flex justify-center">
+          <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>
+        </div> */}
+      </div>
         <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-4 pr-4`}>
             <div className="flex flex-row w-full items-center justify-between gap-4 runded-sm border-2 border-gray-200 p-6">
                 <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
@@ -241,11 +265,8 @@ export default function Dashboard() {
             </div>
 
             {showTaskCard && <Card closeCard={handleCloseCard} task={tasks.find((task) => task.id === selectedTask)} />}
-
-
-
-
         </main>
+        </div>
     )
 }
 

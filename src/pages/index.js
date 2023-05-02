@@ -67,9 +67,8 @@ function User({ session, handleSignOut }) {
       </Head>
 
       <div className="flex justify-between items-center text-center mx-4 py-2">
-        <h3 className="text-4xl font-bold">KANPLAN</h3>
         <div className="flex flex-row items-center">
-        <div className="details flex flex-row gap-2">
+        <div className="details flex flex-col md:flex-row gap-2">
           <h5>Hi, {session.user.name}!</h5>
           <h5>({session.user.email})</h5>
         </div>
@@ -87,8 +86,8 @@ function User({ session, handleSignOut }) {
         <div>
           <ul className=" text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
-              <li key={key} className="flex items-center justify-center space-x-4">
-                <Link href={`/dashboard`}>
+              <li key={key} className="flex items-center text-center justify-center space-x-4">
+                <Link href={`/dashboard`} onClick={() => localStorage.setItem("selectedProjectIndex", key)}> 
                   {project.title}
                 </Link>
               </li>
@@ -101,7 +100,6 @@ function User({ session, handleSignOut }) {
             />
           </ul>
         </div>
-        {/* <Dashboard userEmail={session.user.email} /> TODO: show in different page (/dashboard) */}
       </main>
     </div>
   )

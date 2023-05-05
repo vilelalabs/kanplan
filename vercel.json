@@ -1,0 +1,9 @@
+{
+    "hooks": {
+        "postdeploy": [
+            "npx prisma migrate deploy",
+            "npx prisma db push"
+        ]
+        
+    }
+}

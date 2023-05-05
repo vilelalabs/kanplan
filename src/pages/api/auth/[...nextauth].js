@@ -15,6 +15,7 @@ export default NextAuth({
         strategy: "jwt",
         maxAge: 3000,
     },
+    callbackUrl: process.env.NEXTAUTH_URL,
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({

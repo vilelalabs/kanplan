@@ -60,7 +60,7 @@ function User({ session, handleSignOut }) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col ">
       <Head>
         <title>Kanplan | Home</title>
       </Head>
@@ -81,10 +81,10 @@ function User({ session, handleSignOut }) {
           <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>
         </div> */}
       </div>
-      <main className="flex min-h-screen flex-col items-center space-y-16 sm:pt-24">
+      <main className="flex h-screen flex-col items-center space-y-16 sm:pt-24">
         <Header />
         <div>
-          <ul className=" text-2xl flex flex-col items-center justify-center space-y-4">
+          <ul className="text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
               <li key={key} className="flex items-center text-center justify-center space-x-4">
                 <Link href={`/dashboard`} onClick={() => localStorage.setItem("selectedProjectIndex", key)}>

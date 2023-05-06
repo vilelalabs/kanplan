@@ -26,7 +26,7 @@ export default function Dashboard() {
     const [showTaskCard, setShowTaskCard] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
-    const [projectId,setProjectId] = useState(0)
+    const [projectId, setProjectId] = useState(0)
 
     useEffect(() => {
         const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
@@ -47,10 +47,10 @@ export default function Dashboard() {
         getTasks().then((data) => {
             const tasks = data.filter((task) => task.projectId === projectId)
             setTasks(tasks)
-        }) .catch((err) => {
+        }).catch((err) => {
             alert("500 - Erro ao carregar as tarefas.")
         })
-    },[projectId,showTaskCard])
+    }, [projectId, showTaskCard])
 
 
     const cardsCol1 = tasks.filter((task) => task.status === Status.ToDo)
@@ -154,7 +154,7 @@ export default function Dashboard() {
         })
     }
 
-    function handleSignOut(){
+    function handleSignOut() {
         signOut()
     }
 
@@ -163,111 +163,111 @@ export default function Dashboard() {
             <Head>
                 <title>Kanplan | Dashboard</title>
             </Head>
-<div className="flex justify-between items-center text-center mx-4 py-2">
-<Link href={'/'}><img src='/assets/logo.png' className="w-35 h-20" /></Link>
-        <div className="flex flex-row items-center">
-        <div className="details flex flex-col md:flex-row gap-2">
-          <h5>Hi, {session.user.name}!</h5>
-          <h5>({session.user.email})</h5>
-        </div>
+            <div className="flex justify-between items-center text-center mx-4 py-2">
+                <Link href={'/'}><img src='/assets/logo.png' className="sm:w-35 sm:h-20" /></Link>
+                <div className="flex flex-row items-center">
+                    <div className="details flex flex-col md:flex-row gap-2">
+                        <h5>Hi, {session.user.name}!</h5>
+                        <h5>({session.user.email})</h5>
+                    </div>
 
-        <div className="flex justify-center">
-          <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
-        </div>
-        </div>
-        {/* <div className="flex justify-center">
+                    <div className="flex justify-center">
+                        <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
+                    </div>
+                </div>
+                {/* <div className="flex justify-center">
           <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>
         </div> */}
-      </div>
-        <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-4 pr-4`}>
-            <div className="flex flex-row w-full items-center justify-between gap-4 runded-sm border-2 border-gray-200 p-6">
-                <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
-                    type="text" placeholder="Name Your Project"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    onBlur={handleUpdateProjectTitle}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            e.target.blur()
-                        }
-                    }}
-                />
+            </div>
+            <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-4 pr-4`}>
+                <div className="flex flex-row w-full items-center justify-between gap-4 runded-sm border-2 border-gray-200 p-6">
+                    <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
+                        type="text" placeholder="Name Your Project"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        onBlur={handleUpdateProjectTitle}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.target.blur()
+                            }
+                        }}
+                    />
 
-                <div className="flex flex-row gap-8">
-                    <div onClick={handleDeleteProject}>
-                        <FaTrashAlt className="text-4xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out" />
+                    <div className="flex flex-row gap-8">
+                        <div onClick={handleDeleteProject}>
+                            <FaTrashAlt className="text-4xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out" />
+                        </div>
+                        <Link href="/">
+                            <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
+                        </Link>
+
                     </div>
-                    <Link href="/">
-                        <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
-                    </Link>
-
                 </div>
-            </div>
-            <div>
-                <ul className="flex lg:flex-row flex-col justify-between gap-4">
-                    <li className="flex flex-col w-full space-y-4 p-4">
-                        <h2 className="text-center font-bold text-orange-400">TO DO</h2>
-                        <ul>
-                            {cardsCol1.map((task, key) => (
-                                <li key={key} className="flex items-center justify-center p-2">
-                                    <div>
-                                        <MiniCard
-                                            task={task}
-                                            openTask={() => handleColClick(task.id)}
-                                            deleteTask={() => deleteTask(task.id)}
-                                            moveTaskToRight={() => moveTaskToRight(task.id)} />
-                                    </div>
-                                </li>
-                            ))}
-                            <input className="text-center bg-transparent border-gray-200 w-full p-1 text-gray-100"
-                                type="text" placeholder="Create New Task"
-                                value={newTaskTitle}
-                                onChange={(e) => setNewTaskTitle(e.target.value)}
-                                onKeyDown={handleAddNewTask}
-                                onBlur={() => setNewTaskTitle("")}
+                <div>
+                    <ul className="flex lg:flex-row flex-col justify-between gap-4">
+                        <li className="flex flex-col w-full space-y-4 p-4">
+                            <h2 className="text-center font-bold text-orange-400">TO DO</h2>
+                            <ul>
+                                {cardsCol1.map((task, key) => (
+                                    <li key={key} className="flex items-center justify-center p-2">
+                                        <div>
+                                            <MiniCard
+                                                task={task}
+                                                openTask={() => handleColClick(task.id)}
+                                                deleteTask={() => deleteTask(task.id)}
+                                                moveTaskToRight={() => moveTaskToRight(task.id)} />
+                                        </div>
+                                    </li>
+                                ))}
+                                <input className="text-center bg-transparent border-gray-200 w-full p-1 text-gray-100"
+                                    type="text" placeholder="Create New Task"
+                                    value={newTaskTitle}
+                                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                                    onKeyDown={handleAddNewTask}
+                                    onBlur={() => setNewTaskTitle("")}
 
-                            />
-                        </ul>
+                                />
+                            </ul>
 
-                    </li>
-                    <li className="flex flex-col w-full space-y-4 p-4">
-                        <h2 className="text-center font-bold text-blue-400">IN PROGRESS</h2>
-                        <ul>
-                            {cardsCol2.map((task, key) => (
-                                <li key={key} className="flex items-center justify-center p-2">
-                                    <div>
-                                        <MiniCard
-                                            task={task}
-                                            openTask={() => handleColClick(task.id)}
-                                            deleteTask={() => deleteTask(task.id)}
-                                            moveTaskToLeft={() => moveTaskToLeft(task.id)}
-                                            moveTaskToRight={() => moveTaskToRight(task.id)} />
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </li>
-                    <li className="flex flex-col w-full space-y-4 p-4">
-                        <h2 className="text-center font-bold text-green-400" >DONE</h2>
-                        <ul>
-                            {cardsCol3.map((task, key) => (
-                                <li key={key} className="flex items-center justify-center p-2">
-                                    <div>
-                                        <MiniCard
-                                            task={task}
-                                            openTask={() => handleColClick(task.id)}
-                                            deleteTask={() => deleteTask(task.id)}
-                                            moveTaskToLeft={() => moveTaskToLeft(task.id)} />
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+                        </li>
+                        <li className="flex flex-col w-full space-y-4 p-4">
+                            <h2 className="text-center font-bold text-blue-400">IN PROGRESS</h2>
+                            <ul>
+                                {cardsCol2.map((task, key) => (
+                                    <li key={key} className="flex items-center justify-center p-2">
+                                        <div>
+                                            <MiniCard
+                                                task={task}
+                                                openTask={() => handleColClick(task.id)}
+                                                deleteTask={() => deleteTask(task.id)}
+                                                moveTaskToLeft={() => moveTaskToLeft(task.id)}
+                                                moveTaskToRight={() => moveTaskToRight(task.id)} />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </li>
+                        <li className="flex flex-col w-full space-y-4 p-4">
+                            <h2 className="text-center font-bold text-green-400" >DONE</h2>
+                            <ul>
+                                {cardsCol3.map((task, key) => (
+                                    <li key={key} className="flex items-center justify-center p-2">
+                                        <div>
+                                            <MiniCard
+                                                task={task}
+                                                openTask={() => handleColClick(task.id)}
+                                                deleteTask={() => deleteTask(task.id)}
+                                                moveTaskToLeft={() => moveTaskToLeft(task.id)} />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
 
-            {showTaskCard && <Card closeCard={handleCloseCard} task={tasks.find((task) => task.id === selectedTask)} />}
-        </main>
+                {showTaskCard && <Card closeCard={handleCloseCard} task={tasks.find((task) => task.id === selectedTask)} />}
+            </main>
         </div>
     )
 }

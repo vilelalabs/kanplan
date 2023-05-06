@@ -66,16 +66,16 @@ function User({ session, handleSignOut }) {
       </Head>
 
       <div className="flex justify-between items-center text-center mx-4 py-2">
-      <Link href={'/'}><img src='/assets/logo.png' className="sm:w-35 sm:h-20" /></Link>
+        <Link href={'/'}><img src='/assets/logo.png' className="sm:w-35 sm:h-20" /></Link>
         <div className="flex flex-row items-center">
-        <div className="details flex flex-col md:flex-row gap-2">
-          <h5>Hi, {session.user.name}!</h5>
-          <h5>({session.user.email})</h5>
-        </div>
+          <div className="details flex flex-col md:flex-row gap-2">
+            <h5>Hi, {session.user.name}!</h5>
+            <h5>({session.user.email})</h5>
+          </div>
 
-        <div className="flex justify-center">
-          <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
-        </div>
+          <div className="flex justify-center">
+            <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
+          </div>
         </div>
         {/* <div className="flex justify-center">
           <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>
@@ -87,7 +87,7 @@ function User({ session, handleSignOut }) {
           <ul className=" text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
               <li key={key} className="flex items-center text-center justify-center space-x-4">
-                <Link href={`/dashboard`} onClick={() => localStorage.setItem("selectedProjectIndex", key)}> 
+                <Link href={`/dashboard`} onClick={() => localStorage.setItem("selectedProjectIndex", key)}>
                   {project.title}
                 </Link>
               </li>

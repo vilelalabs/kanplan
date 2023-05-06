@@ -2,8 +2,8 @@
 import { updateTaskStatus } from "@/services/tasks";
 
 import { FaTrashAlt } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowDown } from "react-icons/fa";
+import { FaArrowUp } from "react-icons/fa";
 
 
 export default function MiniCard(props) {
@@ -15,8 +15,8 @@ export default function MiniCard(props) {
 
     return (
         <div className="flex items-center justify-between w-72 h-12 bg-gray-200 text-black rounded-lg shadow-md p-4">
-            {(status == 'done' || status == 'in-progress') && <FaArrowLeft
-                className={`text-2xl cursor-pointer
+            {(status == 'done' || status == 'in-progress') && <FaArrowUp
+                className={`text-2xl cursor-pointer lg:transform lg:-rotate-90 
                  ${status=='in-progress'?'hover:text-orange-400':'hover:text-blue-400'} hover:scale-125 transition duration-200 ease-in-out`}
                 onClick={props.moveTaskToLeft}
             />}
@@ -30,8 +30,8 @@ export default function MiniCard(props) {
                     onClick={props.deleteTask}
                 />
             </div>
-            {(status == 'to-do' || status == 'in-progress') && <FaArrowRight
-                 className={`text-2xl cursor-pointer
+            {(status == 'to-do' || status == 'in-progress') && <FaArrowDown
+                 className={`text-2xl cursor-pointer lg:transform lg:-rotate-90
                  ${status=='in-progress'?'hover:text-green-400':'hover:text-blue-400'} hover:scale-125 transition duration-200 ease-in-out`}
                 onClick={props.moveTaskToRight}
             />}

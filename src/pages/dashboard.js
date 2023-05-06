@@ -27,10 +27,9 @@ export default function Dashboard() {
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
     const [projectId,setProjectId] = useState(0)
-    const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
-
 
     useEffect(() => {
+        const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
         getProjects(userEmail).then((data) => {
             const project = data[selectedProjectIndex]
             setProjectId(project.id)
@@ -48,6 +47,8 @@ export default function Dashboard() {
         getTasks().then((data) => {
             const tasks = data.filter((task) => task.projectId === projectId)
             setTasks(tasks)
+        }) .catch((err) => {
+            alert("500 - Erro ao carregar as tarefas.")
         })
     },[projectId,showTaskCard])
 

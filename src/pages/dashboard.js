@@ -30,8 +30,8 @@ export default function Dashboard() {
 
     useEffect(() => {
         const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
-        getProjects(userEmail).then((data) => {
-            const project = data[selectedProjectIndex]
+        getProjects(userEmail).then((res_data) => {
+            const project = res_data[selectedProjectIndex]
             setProjectId(project.id)
 
             setTitle(project.title)
@@ -44,8 +44,8 @@ export default function Dashboard() {
     }, [showTaskCard])
 
     useEffect(() => {
-        getTasks().then((data) => {
-            const tasks = data.filter((task) => task.projectId === projectId)
+        getTasks().then((res_data) => {
+            const tasks = res_data.filter((task) => task.projectId === projectId)
             setTasks(tasks)
         }).catch((err) => {
             alert("500 - Erro ao carregar as tarefas.")
@@ -100,8 +100,8 @@ export default function Dashboard() {
 
         if (e.key === "Enter") {
 
-            postTasks(newTaskTitle, projectId).then((data) => {
-                setTasks([...tasks, data])
+            postTasks(newTaskTitle, projectId).then((res_data) => {
+                setTasks([...tasks, res_data])
             }).catch((err) => {
                 console.log(err)
             })
@@ -124,10 +124,10 @@ export default function Dashboard() {
         let newStatus;
         newStatus = (task.status === Status.ToDo) ? newStatus = Status.InProgress : newStatus = Status.Done
         console.log(newStatus)
-        updateTaskStatus(taskId, newStatus).then((data) => {
+        updateTaskStatus(taskId, newStatus).then((res_data) => {
             const newTasks = tasks.map((task) => {
                 if (task.id === taskId) {
-                    return data
+                    return res_data
                 }
                 return task
             })
@@ -141,10 +141,10 @@ export default function Dashboard() {
         const task = tasks.find((task) => task.id === taskId)
         let newStatus;
         newStatus = (task.status === Status.Done) ? newStatus = Status.InProgress : newStatus = Status.ToDo
-        updateTaskStatus(taskId, newStatus).then((data) => {
+        updateTaskStatus(taskId, newStatus).then((res_data) => {
             const newTasks = tasks.map((task) => {
                 if (task.id === taskId) {
-                    return data
+                    return res_data
                 }
                 return task
             })

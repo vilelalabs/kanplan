@@ -1,12 +1,16 @@
 import { prisma } from "@/services/prismaClient";
 
 export default async function handler(req, res) {
+    if (!req.body) {
+        return res.status(400).json({ message: 'Invalid Request.' })
+    }
+
     const user = await prisma.user.findUnique({
         where: {
             email: req.body.email
         }
     })
-    if(!user) return res.status(404).json({ message: 'User not found' })
+    if (!user) return res.status(404).json({ message: 'User not found' })
     const userId = user.id;
 
     if (req.method === 'POST' && !req.body.title) {
@@ -25,7 +29,7 @@ export default async function handler(req, res) {
         })
         res.status(200).json(projects)
     }
-    
+
     else if (req.method === 'POST') {
         const project = await prisma.project.create({
             data: {

@@ -10,6 +10,7 @@ import { FaHome } from "react-icons/fa"
 import { FaTrashAlt } from "react-icons/fa";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import { getSession, useSession, signOut } from "next-auth/react"
 import Head from "next/head";
@@ -28,6 +29,8 @@ export default function Dashboard() {
 
     const [projectId, setProjectId] = useState(0)
 
+    const router = useRouter();
+
     useEffect(() => {
         const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
         getProjects(userEmail).then((res_data) => {
@@ -44,7 +47,7 @@ export default function Dashboard() {
     }, [showTaskCard])
 
     useEffect(() => {
-        getTasks().then((res_data) => {
+        getTasks(userEmail, projectId).then((res_data) => {
             const tasks = res_data.filter((task) => task.projectId === projectId)
             setTasks(tasks)
         }).catch((err) => {
@@ -155,7 +158,9 @@ export default function Dashboard() {
     }
 
     function handleSignOut() {
-        signOut()
+        router.push("/").then(() => {
+            signOut()
+        })
     }
 
     return (

@@ -9,7 +9,7 @@ import styles from "@/styles/Form.module.css";
 import Image from "next/image";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 
-import { signIn, signOut } from "next-auth/react"
+import { signIn, getSession } from "next-auth/react"
 
 import { useFormik } from "formik";
 import  login_validate from "../lib/validate";
@@ -114,14 +114,17 @@ export default function Login() {
     )
 }
 
-
-
-// follow tutorial: https://www.youtube.com/watch?v=t0Fs0NO78X8 starting at 1:53:40 minutes
-
-//está sendo usado database Mongo, porém utilizareo o Postgres com o Prisma (https://authjs.dev/reference/adapter/prisma)
-// alguns videos para essa integração:
-// https://www.youtube.com/watch?v=zB7u1r0tc6o&pp=ygUjdXNpbmcgcHJvc21hIGFkYXB0ZXIgd290aCBuZXh0LmF1dGg%3D
-// https://www.youtube.com/watch?v=vo2uq1cJV6w&pp=ygUjdXNpbmcgcHJvc21hIGFkYXB0ZXIgd290aCBuZXh0LmF1dGg%3D
-// (3 minutos?)https://www.youtube.com/watch?v=VputqwS4btU&pp=ygUjdXNpbmcgcHJvc21hIGFkYXB0ZXIgd290aCBuZXh0LmF1dGg%3D
-
-
+export async function getServerSideProps(req) {
+    const session = await getSession(req)
+    if (session) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: { session },
+    }
+}

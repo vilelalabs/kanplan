@@ -3,17 +3,19 @@ import Head from "next/head";
 import Layout from "@/layout/layout";
 import Header from "@/components/Header";
 import Link from "next/link";
-
 import styles from "@/styles/Form.module.css";
 import { HiOutlineUser, HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useFormik } from "formik";
 import {registerValidate} from "../lib/validate";
-
 import { useRouter } from "next/router";
+import ClockLoader from "react-spinners/ClockLoader";
+
 
 export default function Register() {
     const [showPassword, setShowPassword] = useState({ password: false, cpassword: false });
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
+
 
     const formik = useFormik({
         initialValues: {
@@ -34,12 +36,20 @@ export default function Register() {
             },
             body: JSON.stringify(values),
         }
+        setLoading(true)
         const response = await fetch("/api/auth/signup", options)
         const data = await response.json()
         console.log(response.ok)
         if(response.ok){
+            setLoading(false)
             router.push("/login")
         }
+        else{
+            setLoading(false)
+            alert("Invalid register. Please try again.")
+        }
+
+
 
     }
 
@@ -119,6 +129,10 @@ export default function Register() {
                 <p className="text-center text-gray-400">
                     Have an account? <Link href={'/login'} className="text-blue-700">Sign In</Link>
                 </p>
+                {loading &&
+                    <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
+                        <ClockLoader color={"#ccc"} loading={loading} size={100} />
+                    </span>}
             </section>
         </Layout >
 

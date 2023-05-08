@@ -6,11 +6,17 @@ import Header from "@/components/Header"
 
 import { getSession, useSession, signOut } from "next-auth/react"
 
+import ClockLoader from "react-spinners/ClockLoader";
+
 export default function Home() {
   const { data: session } = useSession();
+  const [loading, setLoading] = useState(false)
+
 
   async function handleSignOut() {
-    signOut()
+    setLoading(true)
+    await signOut()
+    setLoading(false)
   }
 
   return (
@@ -19,6 +25,10 @@ export default function Home() {
         <title>Kanplan | Home</title>
       </Head>
       {session ? <User session={session} handleSignOut={handleSignOut} /> : <Guest />}
+      {loading &&
+        <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
+          <ClockLoader color={"#ccc"} loading={loading} size={100} />
+        </span>}
     </div>
   )
 }
@@ -37,12 +47,15 @@ function Guest() {
 }
 //Authorized User
 function User({ session, handleSignOut }) {
+  let [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([])
   const [newProjectTitle, setNewProjectTitle] = useState("")
 
   useEffect(() => {
+    setLoading(true)
     getProjects(session.user.email).then((data) => {
       setProjects(data)
+      setLoading(false)
     })
 
   }, [])
@@ -52,9 +65,11 @@ function User({ session, handleSignOut }) {
     if (newProjectTitle === "") return;
 
     if (e.key === "Enter") {
+      setLoading(true)
       postProjects(newProjectTitle, session.user.email).then((data) => {
         setProjects([...projects, data])
         setNewProjectTitle("")
+        setLoading(false)
       })
     }
   }
@@ -101,6 +116,10 @@ function User({ session, handleSignOut }) {
           </ul>
         </div>
       </main>
+      {loading &&
+        <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
+          <ClockLoader color={"#ccc"} loading={loading} size={100} />
+        </span>}
     </div>
   )
 }

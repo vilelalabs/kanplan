@@ -1,24 +1,23 @@
 import { useState } from "react";
 import Head from "next/head";
-
 import Layout from "@/layout/layout";
 import Header from "@/components/Header";
 import Link from "next/link";
-
 import styles from "@/styles/Form.module.css";
 import Image from "next/image";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
-
 import { signIn, getSession } from "next-auth/react"
-
 import { useFormik } from "formik";
-import  login_validate from "../lib/validate";
-
+import login_validate from "../lib/validate";
 import { useRouter } from "next/router";
+
+import ClockLoader from "react-spinners/ClockLoader";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
-    const router = useRouter()
+    let [loading, setLoading] = useState(false);
+
+    const router = useRouter();
 
     //formik hook
     const formik = useFormik({
@@ -31,26 +30,38 @@ export default function Login() {
     })
 
     async function onSubmit(values) {
+
+        setLoading(true)
         const status = await signIn('credentials', {
             redirect: false,
             email: values.email,
             password: values.password,
-              callbackUrl: '/'
+            callbackUrl: '/'
         })
+        setLoading(false)
 
-        if(status.ok){
+        if (status.ok) {
             console.log("OK")
             router.push(status.url)
         }
+        else {
+            alert("Invalid credentials. Please try again.")
+        }
+
+
     }
 
 
     async function handleGoogleSignin() {
-        signIn('google', { callbackUrl: '/' })
+        setLoading(true)
+        await signIn('google', { callbackUrl: '/' })
+        setLoading(false)
     }
 
     async function handleGithubSignin() {
-        signIn('github', { callbackUrl: '/' })
+        setLoading(true)
+        await signIn('github', { callbackUrl: '/' })
+        setLoading(false)
     }
 
     return (
@@ -65,7 +76,7 @@ export default function Login() {
                 {/*form*/}
                 <form className="flex flex-col gap-5" onSubmit={formik.handleSubmit}>
                     <h1 className="text-2xl font-bold text-center"> Dive into your projects </h1>
-                    <div className={`${styles.input_group} ${formik.errors.email && formik.touched.email?'border-rose-600':''}`}>
+                    <div className={`${styles.input_group} ${formik.errors.email && formik.touched.email ? 'border-rose-600' : ''}`}>
                         <input
                             type="email"
                             name="email"
@@ -78,13 +89,13 @@ export default function Login() {
                         </span>
                     </div>
                     {/* {formik.errors.email && formik.touched.email? <span className="text-red-500 text-sm">{formik.errors.email}</span> : null} */}
-                    <div className={`${styles.input_group} ${formik.errors.password && formik.touched.password?'border-rose-600':''}`}>                        <input
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            placeholder="password"
-                            className={styles.input_text}
-                            {...formik.getFieldProps('password')}
-                        />
+                    <div className={`${styles.input_group} ${formik.errors.password && formik.touched.password ? 'border-rose-600' : ''}`}>                        <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="password"
+                        className={styles.input_text}
+                        {...formik.getFieldProps('password')}
+                    />
                         <span
                             onClick={() => setShowPassword(!showPassword)}
                             className="icon flex items-center px-4 text-white">
@@ -109,6 +120,10 @@ export default function Login() {
                 <p className="text-center text-gray-400">
                     don't have an account? <Link href={'/register'} className="text-blue-700">Sign up</Link>
                 </p>
+                {loading &&
+                    <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
+                        <ClockLoader color={"#ccc"} loading={loading} size={100} />
+                    </span>}
             </section>
         </Layout>
     )

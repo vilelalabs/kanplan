@@ -1,19 +1,16 @@
 import { getProjects, deleteProjects, updateProjectTitle } from "@/services/projects";
 import { getTasks, postTasks, deleteTasks, updateTaskStatus } from "@/services/tasks";
 import { Status } from "@/models/task";
-
 import MiniCard from "@/components/MiniCard"
 import Card from "@/components/Card";
 import Link from "next/link"
-
 import { FaHome } from "react-icons/fa"
 import { FaTrashAlt } from "react-icons/fa";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
 import { getSession, useSession, signOut } from "next-auth/react"
 import Head from "next/head";
+import ClockLoader from "react-spinners/ClockLoader";
 
 export default function Dashboard() {
 
@@ -28,10 +25,12 @@ export default function Dashboard() {
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
     const [projectId, setProjectId] = useState(0)
+    const [loading, setLoading] = useState(true);
 
     const router = useRouter();
 
     useEffect(() => {
+        setLoading(true)
         const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
         getProjects(userEmail).then((res_data) => {
             const project = res_data[selectedProjectIndex]
@@ -39,6 +38,7 @@ export default function Dashboard() {
 
             setTitle(project.title)
             setFirstTitle(project.title)
+            setLoading(false)
 
         }).catch((err) => {
             console.log(err)
@@ -47,9 +47,11 @@ export default function Dashboard() {
     }, [showTaskCard])
 
     useEffect(() => {
+        setLoading(true)
         getTasks(userEmail, projectId).then((res_data) => {
             const tasks = res_data.filter((task) => task.projectId === projectId)
             setTasks(tasks)
+            setLoading(false)
         }).catch((err) => {
             alert("500 - Erro ao carregar as tarefas.")
         })
@@ -78,17 +80,24 @@ export default function Dashboard() {
             setTitle(firstTitle)
             return;
         }
+        setLoading(true)
+        updateProjectTitle(projectId, title).then(() => {
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err)
+        })
 
-        updateProjectTitle(projectId, title);
     }
 
     const handleDeleteProject = () => {
 
         if (!confirm("Are you sure you want to delete this project?")) return
 
-        tasks.forEach((task) => {
-            deleteTasks(task.id);
+        setLoading(true)
+        tasks.forEach(async (task) => {
+            await deleteTasks(task.id)
         })
+        setLoading(false)
         setTasks([])
 
         deleteProjects(projectId).then(() => {
@@ -102,9 +111,10 @@ export default function Dashboard() {
         if (newTaskTitle === "") return;
 
         if (e.key === "Enter") {
-
+            setLoading(true)
             postTasks(newTaskTitle, projectId).then((res_data) => {
                 setTasks([...tasks, res_data])
+                setLoading(false)
             }).catch((err) => {
                 console.log(err)
             })
@@ -114,9 +124,11 @@ export default function Dashboard() {
 
     const deleteTask = (taskId) => {
         if (!confirm("Are you sure you want to delete this task?")) return
+        setLoading(true)
         deleteTasks(taskId).then(() => {
             const newTasks = tasks.filter((task) => task.id !== taskId)
             setTasks(newTasks)
+            setLoading(false)
         }).catch((err) => {
             console.log(err)
         })
@@ -126,7 +138,7 @@ export default function Dashboard() {
         const task = tasks.find((task) => task.id === taskId)
         let newStatus;
         newStatus = (task.status === Status.ToDo) ? newStatus = Status.InProgress : newStatus = Status.Done
-        console.log(newStatus)
+        setLoading(true)
         updateTaskStatus(taskId, newStatus).then((res_data) => {
             const newTasks = tasks.map((task) => {
                 if (task.id === taskId) {
@@ -135,6 +147,7 @@ export default function Dashboard() {
                 return task
             })
             setTasks(newTasks)
+            setLoading(false)
         }).catch((err) => {
             console.log(err)
         })
@@ -144,6 +157,7 @@ export default function Dashboard() {
         const task = tasks.find((task) => task.id === taskId)
         let newStatus;
         newStatus = (task.status === Status.Done) ? newStatus = Status.InProgress : newStatus = Status.ToDo
+        setLoading(true)
         updateTaskStatus(taskId, newStatus).then((res_data) => {
             const newTasks = tasks.map((task) => {
                 if (task.id === taskId) {
@@ -152,13 +166,16 @@ export default function Dashboard() {
                 return task
             })
             setTasks(newTasks)
+            setLoading(false)
         }).catch((err) => {
             console.log(err)
         })
     }
 
     function handleSignOut() {
+        setLoading(true)
         router.push("/").then(() => {
+            setLoading(false)
             signOut()
         })
     }
@@ -273,6 +290,10 @@ export default function Dashboard() {
 
                 {showTaskCard && <Card closeCard={handleCloseCard} task={tasks.find((task) => task.id === selectedTask)} />}
             </main>
+            {loading &&
+                <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
+                    <ClockLoader color={"#ccc"} loading={loading} size={100} />
+                </span>}
         </div>
     )
 }

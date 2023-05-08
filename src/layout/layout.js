@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Layout({ children }) {
     return (
         <main className="p-8">
-            <div className="container h-screen">
+            <div className="h-screen">
                 <div className="m-auto bg-slate-50 rounded-md lg:w-3/4 h-3/4 grid lg:grid-cols-2">
                     <div className="right flex flex-col justify-evenly bg-gray-800">
                         {/* <Image src="/assets/image.png" width={500} height={100} alt="image" /> */}

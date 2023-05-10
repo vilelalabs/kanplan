@@ -1,6 +1,3 @@
-
-import { updateTaskStatus } from "@/services/tasks";
-
 import { FaTrashAlt } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";

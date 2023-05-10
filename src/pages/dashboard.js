@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { getSession, useSession, signOut } from "next-auth/react"
 import Head from "next/head";
 import ClockLoader from "react-spinners/ClockLoader";
+import DeleteDialog from "@/components/DeleteDialog";
 
 export default function Dashboard() {
 
@@ -26,6 +27,10 @@ export default function Dashboard() {
 
     const [projectId, setProjectId] = useState(0)
     const [loading, setLoading] = useState(true);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const [deleteResult, setDeleteResult] = useState(false)
+    const [deleteType, setDeleteType] = useState("")
+    const [taskIdToDelete, setTaskIdToDelete] = useState(0)
 
     const router = useRouter();
 
@@ -89,9 +94,8 @@ export default function Dashboard() {
 
     }
 
-    const handleDeleteProject = () => {
 
-        if (!confirm("Are you sure you want to delete this project?")) return
+    const handleDeleteProject = () => {
 
         setLoading(true)
         tasks.forEach(async (task) => {
@@ -106,6 +110,18 @@ export default function Dashboard() {
             console.log(err)
         })
     }
+
+    useEffect(() => {
+        if (!deleteResult) return
+        setDeleteResult(false)
+        if (deleteType === "project") {
+            handleDeleteProject()
+        }
+        else if (deleteType === "task") {
+            deleteTask(taskIdToDelete)
+        }
+    }, [showDeleteDialog])
+
 
     const handleAddNewTask = (e) => {
         if (newTaskTitle === "") return;
@@ -123,7 +139,6 @@ export default function Dashboard() {
     }
 
     const deleteTask = (taskId) => {
-        if (!confirm("Are you sure you want to delete this task?")) return
         setLoading(true)
         deleteTasks(taskId).then(() => {
             const newTasks = tasks.filter((task) => task.id !== taskId)
@@ -216,7 +231,10 @@ export default function Dashboard() {
                     />
 
                     <div className="flex flex-row gap-8">
-                        <div onClick={handleDeleteProject}>
+                        <div onClick={() => {
+                            setDeleteType("project")
+                            setShowDeleteDialog(true)
+                        }}>
                             <FaTrashAlt className="text-4xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out" />
                         </div>
                         <Link href="/">
@@ -236,7 +254,11 @@ export default function Dashboard() {
                                             <MiniCard
                                                 task={task}
                                                 openTask={() => handleColClick(task.id)}
-                                                deleteTask={() => deleteTask(task.id)}
+                                                deleteTask={() => {
+                                                    setTaskIdToDelete(task.id)
+                                                    setDeleteType("task")
+                                                    setShowDeleteDialog(true)
+                                                }}
                                                 moveTaskToRight={() => moveTaskToRight(task.id)} />
                                         </div>
                                     </li>
@@ -261,7 +283,11 @@ export default function Dashboard() {
                                             <MiniCard
                                                 task={task}
                                                 openTask={() => handleColClick(task.id)}
-                                                deleteTask={() => deleteTask(task.id)}
+                                                deleteTask={() => {
+                                                    setTaskIdToDelete(task.id)
+                                                    setDeleteType("task")
+                                                    setShowDeleteDialog(true)
+                                                }}
                                                 moveTaskToLeft={() => moveTaskToLeft(task.id)}
                                                 moveTaskToRight={() => moveTaskToRight(task.id)} />
                                         </div>
@@ -278,7 +304,11 @@ export default function Dashboard() {
                                             <MiniCard
                                                 task={task}
                                                 openTask={() => handleColClick(task.id)}
-                                                deleteTask={() => deleteTask(task.id)}
+                                                deleteTask={() => {
+                                                    setTaskIdToDelete(task.id)
+                                                    setDeleteType("task")
+                                                    setShowDeleteDialog(true)
+                                                }}
                                                 moveTaskToLeft={() => moveTaskToLeft(task.id)} />
                                         </div>
                                     </li>
@@ -294,6 +324,7 @@ export default function Dashboard() {
                 <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
                     <ClockLoader color={"#ccc"} loading={loading} size={100} />
                 </span>}
+            {showDeleteDialog && <DeleteDialog deleteType={deleteType} setDeleteResult={setDeleteResult} setShowDeleteDialog={setShowDeleteDialog} />}
         </div>
     )
 }

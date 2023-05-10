@@ -1,10 +1,7 @@
 
 export async function getTasks(email, projectId) {
-  // const res = await fetch('/api/tasks')
-  // const data = await res.json()
-  // return data
 
-  const res = await fetch(`/api/tasks`,{
+  const res = await fetch(`/api/tasks/tasks`,{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -13,13 +10,11 @@ export async function getTasks(email, projectId) {
   })
   const data = await res.json()
   return data
-
-
   
 }
 
 export async function postTasks(title, projectId) {
-  const res = await fetch('/api/tasks', {
+  const res = await fetch('/api/tasks/tasks', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -40,7 +35,6 @@ export async function updateTask(id, title, description) {
   })
 
   const data = await res.json()
-
   return data
 }
 
@@ -54,7 +48,6 @@ export async function updateTaskStatus(id, status) {
   })
 
   const data = await res.json()
-
   return data
 }
 

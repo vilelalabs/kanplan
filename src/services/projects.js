@@ -1,6 +1,6 @@
 
 export async function getProjects(email) {
-  const res = await fetch(`/api/projects`,{
+  const res = await fetch(`/api/projects/projects`,{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ export async function getProjects(email) {
 
 export async function postProjects(title, email) {
 
-  const res = await fetch('/api/projects', {
+  const res = await fetch('/api/projects/projects', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

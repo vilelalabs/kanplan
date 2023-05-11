@@ -24,9 +24,9 @@ export default function Card(props) {
         <div className="absolute inset-x-1/2 transform -translate-x-1/2
                         flex flex-col items-centerjustify-center
                         w-96 bg-gray-100 bg-opacity-95 text-black rounded-lg
-                        p-10 m-10 shadow-md gap-4">
+                        p-5 m-10 shadow-md gap-4">
             <div>
-                <input className="text-lg font-bold bg-transparent p-2 w-full border-gray-200 text-black"
+                <input className="text-md font-bold bg-transparent p-2 w-full text-black mt-5"
                     type="text" placeholder="Name Your Task"
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
@@ -37,7 +37,7 @@ export default function Card(props) {
                 />
             </div>
 
-            <textarea className="text-lg h-32 font-normal mt-10 bg-transparent border-gray-200 w-full p-2 text-black"
+            <textarea className="text-sm h-32 mt-5 bg-transparent p-2 text-black"
                 type="text" placeholder="Insert Your description"
                 value={taskDescription}
                 onChange={(e) => setTaskDescription(e.target.value)}

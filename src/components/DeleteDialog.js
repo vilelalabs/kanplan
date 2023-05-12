@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { FaTimesCircle } from "react-icons/fa";
 
 

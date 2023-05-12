@@ -13,6 +13,7 @@ import Head from "next/head";
 import ClockLoader from "react-spinners/ClockLoader";
 import DeleteDialog from "@/components/DeleteDialog";
 import ArchiveDialog from "@/components/ArchiveDialog";
+import BannerArchivedProjects from "@/components/BannerArchivedProjects";
 
 export default function Dashboard() {
 
@@ -35,13 +36,16 @@ export default function Dashboard() {
 
     const [showArchiveDialog, setShowArchiveDialog] = useState(false)
     const [archiveResult, setArchiveResult] = useState(false)
+    const [archivedProject, setArchivedProject] = useState(false)
+
 
     const router = useRouter();
 
     useEffect(() => {
         setLoading(true)
         const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
-        getProjects(userEmail,false).then((res_data) => {
+        setArchivedProject(localStorage.getItem("archivedProject") === "true" ? true : false)
+        getProjects(userEmail, archivedProject).then((res_data) => {
             const project = res_data[selectedProjectIndex]
             setProjectId(project.id)
 
@@ -53,7 +57,7 @@ export default function Dashboard() {
             console.log(err)
         })
 
-    }, [showTaskCard])
+    }, [showTaskCard, archivedProject])
 
     useEffect(() => {
         setLoading(true)
@@ -232,9 +236,10 @@ export default function Dashboard() {
             </div>
             <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-4 pr-4`}>
                 <div className="flex flex-row w-full items-center justify-between gap-4 runded-sm border-2 border-gray-200 p-6">
-                    <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
+                 <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
                         type="text" placeholder="Name Your Project"
                         value={title}
+                        disabled={archivedProject}
                         onChange={(e) => setTitle(e.target.value)}
                         onBlur={handleUpdateProjectTitle}
                         onKeyDown={(e) => {
@@ -245,23 +250,23 @@ export default function Dashboard() {
                     />
 
                     <div className="flex flex-row gap-8">
-                        <div onClick={() => {
+                        {!archivedProject && <div onClick={() => {
                             setShowArchiveDialog(true)
                         }}>
                             <HiInboxIn className="text-4xl hover:text-yellow-400 hover:scale-125 transition duration-200 ease-in-out" />
-                        </div>
-                        <div onClick={() => {
+                        </div>}
+                        {!archivedProject && <div onClick={() => {
                             setDeleteType("project")
                             setShowDeleteDialog(true)
                         }}>
                             <FaTrashAlt className="text-4xl hover:text-red-400 hover:scale-125 transition duration-200 ease-in-out" />
-                        </div>
+                        </div>}
                         <Link href="/">
                             <FaHome className="text-4xl hover:text-blue-400 hover:scale-125 transition duration-200 ease-in-out" />
                         </Link>
-
                     </div>
                 </div>
+                {archivedProject && <BannerArchivedProjects />}
                 <div>
                     <ul className="flex lg:flex-row flex-col justify-between gap-4">
                         <li className="flex flex-col w-full space-y-4 p-4">
@@ -272,6 +277,7 @@ export default function Dashboard() {
                                         <div>
                                             <MiniCard
                                                 task={task}
+                                                isArchived={archivedProject}
                                                 openTask={() => handleColClick(task.id)}
                                                 deleteTask={() => {
                                                     setTaskIdToDelete(task.id)
@@ -282,14 +288,14 @@ export default function Dashboard() {
                                         </div>
                                     </li>
                                 ))}
-                                <input className="text-center bg-transparent border-gray-200 w-full p-1 text-gray-100"
+                                {!archivedProject &&<input className="text-center bg-transparent border-gray-200 w-full p-1 text-gray-100"
                                     type="text" placeholder="Create New Task"
                                     value={newTaskTitle}
+                                    disabled={archivedProject}
                                     onChange={(e) => setNewTaskTitle(e.target.value)}
                                     onKeyDown={handleAddNewTask}
                                     onBlur={() => setNewTaskTitle("")}
-
-                                />
+                                />}
                             </ul>
 
                         </li>
@@ -301,6 +307,7 @@ export default function Dashboard() {
                                         <div>
                                             <MiniCard
                                                 task={task}
+                                                isArchived={archivedProject}
                                                 openTask={() => handleColClick(task.id)}
                                                 deleteTask={() => {
                                                     setTaskIdToDelete(task.id)
@@ -322,6 +329,7 @@ export default function Dashboard() {
                                         <div>
                                             <MiniCard
                                                 task={task}
+                                                isArchived={archivedProject}
                                                 openTask={() => handleColClick(task.id)}
                                                 deleteTask={() => {
                                                     setTaskIdToDelete(task.id)
@@ -337,7 +345,7 @@ export default function Dashboard() {
                     </ul>
                 </div>
 
-                {showTaskCard && <Card closeCard={handleCloseCard} task={tasks.find((task) => task.id === selectedTask)} />}
+                {showTaskCard && <Card isArchived={archivedProject} closeCard={handleCloseCard} task={tasks.find((task) => task.id === selectedTask)} />}
             </main>
             {loading &&
                 <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">

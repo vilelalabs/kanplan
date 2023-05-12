@@ -8,8 +8,8 @@ export async function getProjects(email,archived) {
     body: JSON.stringify({ email })
   })
   const data = await res.json()
-  console.log(data)
   const filteredProjects = data.filter((project) => project.archived === archived)
+  //console.log(filteredProjects)
   return filteredProjects
 }
 

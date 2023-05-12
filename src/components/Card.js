@@ -7,6 +7,7 @@ export default function Card(props) {
 
     const [taskDescription, setTaskDescription] = useState(props.task.description);
     const [taskTitle, setTaskTitle] = useState(props.task.title);
+    const isArchived = props.isArchived;
 
     const handleSaveChanges = () => {
         if (taskTitle === "") {
@@ -29,6 +30,7 @@ export default function Card(props) {
                 <input className="text-md font-bold bg-transparent p-2 w-full text-black mt-5"
                     type="text" placeholder="Name Your Task"
                     value={taskTitle}
+                    disabled={isArchived}
                     onChange={(e) => setTaskTitle(e.target.value)}
                 />
 
@@ -40,16 +42,17 @@ export default function Card(props) {
             <textarea className="text-sm h-32 mt-5 bg-transparent p-2 text-black"
                 type="text" placeholder="Insert Your description"
                 value={taskDescription}
+                disabled={isArchived}
                 onChange={(e) => setTaskDescription(e.target.value)}
             />
-            <div className="flex w-full justify-end">
+            {!isArchived &&<div className="flex w-full justify-end">
                 <button className="bg-blue-800 hover:bg-blue-600 text-white font-bold
                                 py-2 px-4 rounded mt-2 w-24 justify-right"
                     onClick={handleSaveChanges}
                 >
                     Save
                 </button>
-            </div>
+            </div>}
         </div>
     );
 }

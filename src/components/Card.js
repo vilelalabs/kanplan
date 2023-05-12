@@ -40,7 +40,7 @@ export default function Card(props) {
             </div>
 
             <textarea className="text-sm h-32 mt-5 bg-transparent p-2 text-black"
-                type="text" placeholder="Insert Your description"
+                type="text" placeholder={isArchived?"":"Insert Your description"}
                 value={taskDescription}
                 disabled={isArchived}
                 onChange={(e) => setTaskDescription(e.target.value)}

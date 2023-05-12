@@ -54,7 +54,7 @@ function User({ session, handleSignOut }) {
 
   useEffect(() => {
     setLoading(true)
-    getProjects(session.user.email,archivedProjects).then((data) => {
+    getProjects(session.user.email, archivedProjects).then((data) => {
       setProjects(data)
       setLoading(false)
     })
@@ -99,7 +99,7 @@ function User({ session, handleSignOut }) {
       </div>
       <main className="flex h-screen flex-col items-center space-y-16 sm:pt-24">
         <Header />
-        {archivedProjects && <BannerArchivedProjects/>}
+        {archivedProjects && <BannerArchivedProjects />}
         <div>
           <ul className="text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
@@ -107,24 +107,27 @@ function User({ session, handleSignOut }) {
                 <Link href={`/dashboard`} onClick={() => {
                   localStorage.setItem("selectedProjectIndex", key)
                   localStorage.setItem("archivedProject", archivedProjects)
-                  }}>
+                }}>
                   {project.title}
                 </Link>
               </li>
             ))}
-            <input className="text-center bg-transparent border-gray-200 text-gray-100"
-              type="text" placeholder="Name Your New Project"
-              value={newProjectTitle}
-              onChange={(e) => setNewProjectTitle(e.target.value)}
-              onKeyDown={handleAddNewProject}
-            />
+            {!archivedProjects &&
+              <input className="text-center bg-transparent border-gray-200 text-gray-100"
+                type="text" placeholder="Name Your New Project"
+                value={newProjectTitle}
+                disabled={archivedProjects}
+                onChange={(e) => setNewProjectTitle(e.target.value)}
+                onKeyDown={handleAddNewProject}
+              />}
           </ul>
+          {(projects.length === 0) && <p className="text-xl text-center bg-transparent border-gray-200 text-gray-100">No Archived Projects Found</p>}
           <div className="flex justify-center">
             <button
-            className="m-8 px-4 p-2 rounded-md bg-blue-800 text-gray-50 hover:bg-blue-700 w-full"
-            onClick={()=>{setArchivedProjects(!archivedProjects)}}>
-              Toggle to {archivedProjects?"Active Projects":"Archived Projects"}
-              </button>
+              className="m-8 px-4 p-2 rounded-md bg-blue-800 text-gray-50 hover:bg-blue-700 w-full"
+              onClick={() => { setArchivedProjects(!archivedProjects) }}>
+              Toggle to {archivedProjects ? "Active Projects" : "Archived Projects"}
+            </button>
           </div>
         </div>
       </main>

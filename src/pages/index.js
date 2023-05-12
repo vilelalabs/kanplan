@@ -53,7 +53,7 @@ function User({ session, handleSignOut }) {
 
   useEffect(() => {
     setLoading(true)
-    getProjects(session.user.email).then((data) => {
+    getProjects(session.user.email,false).then((data) => {
       setProjects(data)
       setLoading(false)
     })

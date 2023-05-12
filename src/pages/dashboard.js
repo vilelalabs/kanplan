@@ -1,17 +1,18 @@
-import { getProjects, deleteProjects, updateProjectTitle } from "@/services/projects";
+import { getProjects, deleteProjects, archiveProjects, updateProjectTitle } from "@/services/projects";
 import { getTasks, postTasks, deleteTasks, updateTaskStatus } from "@/services/tasks";
 import { Status } from "@/models/task";
 import MiniCard from "@/components/MiniCard"
 import Card from "@/components/Card";
 import Link from "next/link"
-import { FaHome } from "react-icons/fa"
-import { FaTrashAlt } from "react-icons/fa";
+import { FaHome, FaTrashAlt } from "react-icons/fa"
+import { HiInboxIn } from "react-icons/hi"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getSession, useSession, signOut } from "next-auth/react"
 import Head from "next/head";
 import ClockLoader from "react-spinners/ClockLoader";
 import DeleteDialog from "@/components/DeleteDialog";
+import ArchiveDialog from "@/components/ArchiveDialog";
 
 export default function Dashboard() {
 
@@ -24,20 +25,23 @@ export default function Dashboard() {
     const [selectedTask, setSelectedTask] = useState(0);
     const [showTaskCard, setShowTaskCard] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState("")
-
     const [projectId, setProjectId] = useState(0)
     const [loading, setLoading] = useState(true);
+
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [deleteResult, setDeleteResult] = useState(false)
     const [deleteType, setDeleteType] = useState("")
     const [taskIdToDelete, setTaskIdToDelete] = useState(0)
+
+    const [showArchiveDialog, setShowArchiveDialog] = useState(false)
+    const [archiveResult, setArchiveResult] = useState(false)
 
     const router = useRouter();
 
     useEffect(() => {
         setLoading(true)
         const selectedProjectIndex = localStorage.getItem("selectedProjectIndex")
-        getProjects(userEmail).then((res_data) => {
+        getProjects(userEmail,false).then((res_data) => {
             const project = res_data[selectedProjectIndex]
             setProjectId(project.id)
 
@@ -61,6 +65,24 @@ export default function Dashboard() {
             alert("500 - Erro ao carregar as tarefas.")
         })
     }, [projectId, showTaskCard])
+
+
+    useEffect(() => {
+        if (!deleteResult) return
+        setDeleteResult(false)
+        if (deleteType === "project") {
+            handleDeleteProject()
+        }
+        else if (deleteType === "task") {
+            deleteTask(taskIdToDelete)
+        }
+    }, [showDeleteDialog])
+
+    useEffect(() => {
+        if (!archiveResult) return
+        setArchiveResult(false)
+        handleArchiveProject()
+    }, [showArchiveDialog])
 
 
     const cardsCol1 = tasks.filter((task) => task.status === Status.ToDo)
@@ -93,8 +115,6 @@ export default function Dashboard() {
         })
 
     }
-
-
     const handleDeleteProject = () => {
 
         setLoading(true)
@@ -110,19 +130,6 @@ export default function Dashboard() {
             console.log(err)
         })
     }
-
-    useEffect(() => {
-        if (!deleteResult) return
-        setDeleteResult(false)
-        if (deleteType === "project") {
-            handleDeleteProject()
-        }
-        else if (deleteType === "task") {
-            deleteTask(taskIdToDelete)
-        }
-    }, [showDeleteDialog])
-
-
     const handleAddNewTask = (e) => {
         if (newTaskTitle === "") return;
 
@@ -137,7 +144,6 @@ export default function Dashboard() {
             setNewTaskTitle("")
         }
     }
-
     const deleteTask = (taskId) => {
         setLoading(true)
         deleteTasks(taskId).then(() => {
@@ -147,6 +153,15 @@ export default function Dashboard() {
         }).catch((err) => {
             console.log(err)
         })
+    }
+    const handleArchiveProject = () => {
+        setLoading(true)
+        archiveProjects(projectId).then(() => {
+            window.location.href = "/"
+        }).catch((err) => {
+            console.log(err)
+        })
+        setLoading(false)
     }
 
     const moveTaskToRight = (taskId) => {
@@ -167,7 +182,6 @@ export default function Dashboard() {
             console.log(err)
         })
     }
-
     const moveTaskToLeft = (taskId) => {
         const task = tasks.find((task) => task.id === taskId)
         let newStatus;
@@ -231,6 +245,11 @@ export default function Dashboard() {
                     />
 
                     <div className="flex flex-row gap-8">
+                        <div onClick={() => {
+                            setShowArchiveDialog(true)
+                        }}>
+                            <HiInboxIn className="text-4xl hover:text-yellow-400 hover:scale-125 transition duration-200 ease-in-out" />
+                        </div>
                         <div onClick={() => {
                             setDeleteType("project")
                             setShowDeleteDialog(true)
@@ -325,6 +344,7 @@ export default function Dashboard() {
                     <ClockLoader color={"#ccc"} loading={loading} size={100} />
                 </span>}
             {showDeleteDialog && <DeleteDialog deleteType={deleteType} setDeleteResult={setDeleteResult} setShowDeleteDialog={setShowDeleteDialog} />}
+            {showArchiveDialog && <ArchiveDialog setArchiveResult={setArchiveResult} setShowArchiveDialog={setShowArchiveDialog} />}
         </div>
     )
 }

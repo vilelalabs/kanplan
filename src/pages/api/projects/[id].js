@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         }
     }
 
-    else if(req.method === 'PUT') {
+    else if(req.method === 'PUT' && req.body.title) {
         const { title } = req.body
         try {
             const updatedProject = await prisma.project.update({
@@ -31,6 +31,23 @@ export default async function handler(req, res) {
             res.status(200).json(updatedProject)
 
         } catch (error) {
+            res.status(400).json({ message: error.message })
+        }
+    }
+    else{
+        try {
+            const archivedProject = await prisma.project.update({
+                where: {
+                    id: parseInt(id)
+                },
+                data: {
+                    archived: true
+                }
+            })
+            res.status(200).json(archivedProject)
+
+        }
+        catch (error) {
             res.status(400).json({ message: error.message })
         }
     }

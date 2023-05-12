@@ -25,6 +25,7 @@ model Project {
   tasks  Task[]
   userId String
   User   User   @relation(fields: [userId], references: [id])
+  archived Boolean @default(false)
 }
 
 // NEXT AUTH ADAPTER MODELS

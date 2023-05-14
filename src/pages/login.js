@@ -13,11 +13,28 @@ import { useRouter } from "next/router";
 
 import ClockLoader from "react-spinners/ClockLoader";
 
+import enUS from "../../locales/login/en-US";
+import ptBR from "../../locales/login/pt-BR";
+
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     let [loading, setLoading] = useState(false);
 
     const router = useRouter();
+    const {locale} = router;
+    
+    let t;
+    switch (locale) {
+        case 'en-US':
+            t = enUS
+            break;
+        case 'pt-BR':
+            t = ptBR
+            break;
+        default:
+            t = enUS
+            break;
+    }
 
     //formik hook
     const formik = useFormik({
@@ -75,7 +92,7 @@ export default function Login() {
                 </div>
                 {/*form*/}
                 <form className="flex flex-col gap-5" onSubmit={formik.handleSubmit}>
-                    <h1 className="text-2xl font-bold text-center"> Dive into your projects </h1>
+                    <h1 className="text-2xl font-bold text-center"> {t.loginTitle} </h1>
                     <div className={`${styles.input_group} ${formik.errors.email && formik.touched.email ? 'border-rose-600' : ''}`}>
                         <input
                             type="email"
@@ -92,7 +109,7 @@ export default function Login() {
                     <div className={`${styles.input_group} ${formik.errors.password && formik.touched.password ? 'border-rose-600' : ''}`}>                        <input
                         type={showPassword ? "text" : "password"}
                         name="password"
-                        placeholder="password"
+                        placeholder={t.passwordPlaceholder}
                         className={styles.input_text}
                         {...formik.getFieldProps('password')}
                     />
@@ -106,19 +123,19 @@ export default function Login() {
                     {/*login buttons*/}
                     <div className="input-button">
                         <button type="submit" className={styles.button}>
-                            Login
+                            {t.loginButton}
                         </button>
                     </div>
                     <div className="input-button">
-                        <button type="button" className={styles.button_custom} onClick={handleGoogleSignin}>Sign in with Google <Image src={'/assets/google.svg'} width={20} height={20} alt={'google logo'} /></button>
+                        <button type="button" className={styles.button_custom} onClick={handleGoogleSignin}>{t.signInWith} Google <Image src={'/assets/google.svg'} width={20} height={20} alt={'google logo'} /></button>
                     </div>
                     <div className="input-button">
-                        <button type="button" className={styles.button_custom} onClick={handleGithubSignin}>Sign in with Github <Image src={'/assets/github.svg'} width={25} height={25} alt={'google logo'} /></button>
+                        <button type="button" className={styles.button_custom} onClick={handleGithubSignin}>{t.signInWith} Github <Image src={'/assets/github.svg'} width={25} height={25} alt={'google logo'} /></button>
                     </div>
                 </form>
                 {/*bottom*/}
                 <p className="text-center text-gray-400">
-                    don't have an account? <Link href={'/register'} className="text-blue-700">Sign up</Link>
+                    {t.noAccount} <Link href={'/register'} className="text-blue-700">{t.signUp}</Link>
                 </p>
                 {loading &&
                     <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">

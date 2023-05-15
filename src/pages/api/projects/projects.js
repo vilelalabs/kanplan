@@ -5,13 +5,15 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: 'Invalid Request.' })
     }
 
+    let userId;
+
     const user = await prisma.user.findUnique({
         where: {
             email: req.body.email
         }
     })
     if (!user) return res.status(404).json({ message: 'User not found' })
-    const userId = user.id;
+    userId = user.id;
 
     if (req.method === 'POST' && !req.body.title) {
         const projects = await prisma.project.findMany({

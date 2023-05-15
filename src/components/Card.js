@@ -1,9 +1,13 @@
 import { updateTask } from "@/services/tasks";
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
-
+import translate from "@/services/translate";
+import { useRouter } from "next/router";
 
 export default function Card(props) {
+    const router = useRouter();
+    const { locale } = router;
+    let t = translate("card", locale);
 
     const [taskDescription, setTaskDescription] = useState(props.task.description);
     const [taskTitle, setTaskTitle] = useState(props.task.title);
@@ -28,7 +32,7 @@ export default function Card(props) {
                         p-5 m-10 shadow-md gap-4">
             <div>
                 <input className="text-md font-bold bg-transparent p-2 w-full text-black mt-5"
-                    type="text" placeholder="Name Your Task"
+                    type="text" placeholder={t.nameTaskPlaceholder}
                     value={taskTitle}
                     disabled={isArchived}
                     onChange={(e) => setTaskTitle(e.target.value)}
@@ -40,7 +44,7 @@ export default function Card(props) {
             </div>
 
             <textarea className="text-sm h-32 mt-5 bg-transparent p-2 text-black"
-                type="text" placeholder={isArchived?"":"Insert Your description"}
+                type="text" placeholder={isArchived?"":t.descriptionPlaceholder}
                 value={taskDescription}
                 disabled={isArchived}
                 onChange={(e) => setTaskDescription(e.target.value)}
@@ -50,7 +54,7 @@ export default function Card(props) {
                                 py-2 px-4 rounded mt-2 w-24 justify-right"
                     onClick={handleSaveChanges}
                 >
-                    Save
+                    {t.saveButton}
                 </button>
             </div>}
         </div>

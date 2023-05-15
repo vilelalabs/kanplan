@@ -38,4 +38,26 @@ export default {
         haveAccount: "Já tem uma conta?",
         signIn: "Entrar",
     },
+    index: {
+        greetings: "Olá",
+        signOutButton: "Sair",
+        noArchivedFound: "Nenhum projeto arquivado encontrado!",
+        nameProjectPlaceholder: "Novo projeto",
+        buttonSeeArchived: "Ver projetos arquivados",
+        buttonSeeActive: "Ver projetos ativos",
+    },
+    dashboard: {
+        greetings: "Olá",
+        signOutButton: "Sair",
+        nameProjectPlaceholder: "Nomeie seu projeto",
+        todo: "Para fazer",
+        inProgress: "Em andamento",
+        done: "Finalizado",
+        createNewTaskPlaceholder: "Criar uma nova tarefa",
+    },
+    card: {
+        nameTaskPlaceholder: "Nomeie sua tarefa",
+        descriptionPlaceholder: "Descrição",
+        saveButton: "Salvar",
+    }
 }

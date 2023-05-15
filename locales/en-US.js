@@ -37,4 +37,26 @@ export default {
         haveAccount: "Have an account?",
         signIn: "Sign in",
     },
+    index: {
+        greetings: "Hi",
+        signOutButton: "Sign Out",
+        noArchivedFound: "No Archived Projects Found!",
+        nameProjectPlaceholder: "Name Your New Project",
+        buttonSeeArchived: "See Archived Projects",
+        buttonSeeActive: "See Active Projects",
+    },
+    dashboard: {
+        greetings: "Hi",
+        signOutButton: "Sign Out",
+        nameProjectPlaceholder: "Name Your Project",
+        todo: "To Do",
+        inProgress: "In Progress",
+        done: "Done",
+        createNewTaskPlaceholder: "Create a new task",
+    },
+    card:{
+        nameTaskPlaceholder: "Name your task",
+        descriptionPlaceholder: "Description",
+        saveButton: "Save",
+    }
 }

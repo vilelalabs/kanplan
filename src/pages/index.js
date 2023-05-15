@@ -4,10 +4,10 @@ import { useState, useEffect } from "react"
 import { getProjects, postProjects } from "../services/projects"
 import Header from "@/components/Header"
 import BannerArchivedProjects from "@/components/BannerArchivedProjects"
-
 import { getSession, useSession, signOut } from "next-auth/react"
-
 import ClockLoader from "react-spinners/ClockLoader";
+import translate from "@/services/translate";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -52,6 +52,10 @@ function User({ session, handleSignOut }) {
   const [newProjectTitle, setNewProjectTitle] = useState("")
   const [archivedProjects, setArchivedProjects] = useState(false)
 
+  const router = useRouter();
+  const { locale } = router;
+  let t = translate("index", locale)
+
   useEffect(() => {
     setLoading(true)
     getProjects(session.user.email, archivedProjects).then((data) => {
@@ -85,12 +89,14 @@ function User({ session, handleSignOut }) {
         <Link href={'/'}><img src='/assets/logo.png' className="sm:w-35 sm:h-20" /></Link>
         <div className="flex flex-row items-center">
           <div className="details flex flex-col md:flex-row gap-2">
-            <h5>Hi, {session.user.name}!</h5>
+            <h5>{t.greetings}, {session.user.name}!</h5>
             <h5>({session.user.email})</h5>
           </div>
 
           <div className="flex justify-center">
-            <button className="ml-4 px-4 py-1 rounded-md bg-blue-800 text-gray-50" onClick={handleSignOut}>Sign Out</button>
+            <button
+              className="ml-4 px-4 py-1 rounded-md bg-blue-800 text-gray-50 hover:bg-blue-700"
+              onClick={handleSignOut}>{t.signOutButton}</button>
           </div>
         </div>
         {/* <div className="flex justify-center">
@@ -101,7 +107,7 @@ function User({ session, handleSignOut }) {
         <Header />
         {archivedProjects && <BannerArchivedProjects />}
         <div>
-          <ul className="text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4">
+          <ul className=" text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
               <li key={key} className="flex items-center text-center justify-center space-x-4">
                 <Link href={`/dashboard`} onClick={() => {
@@ -114,19 +120,19 @@ function User({ session, handleSignOut }) {
             ))}
             {!archivedProjects &&
               <input className="text-center bg-transparent border-gray-200 text-gray-100"
-                type="text" placeholder="Name Your New Project"
+                type="text" placeholder={t.nameProjectPlaceholder}
                 value={newProjectTitle}
                 disabled={archivedProjects}
                 onChange={(e) => setNewProjectTitle(e.target.value)}
                 onKeyDown={handleAddNewProject}
               />}
           </ul>
-          {(projects.length === 0) && <p className="text-xl text-center bg-transparent border-gray-200 text-gray-100">No Archived Projects Found</p>}
+          {(projects.length === 0) && <p className="text-xl text-center bg-transparent border-gray-200 text-gray-100">{t.noArchivedFound}</p>}
           <div className="flex justify-center">
             <button
               className="m-8 px-4 p-2 rounded-md bg-blue-800 text-gray-50 hover:bg-blue-700 w-full"
               onClick={() => { setArchivedProjects(!archivedProjects) }}>
-              Toggle to {archivedProjects ? "Active Projects" : "Archived Projects"}
+              {archivedProjects ? t.buttonSeeActive : t.buttonSeeArchived}
             </button>
           </div>
         </div>

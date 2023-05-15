@@ -14,6 +14,7 @@ import ClockLoader from "react-spinners/ClockLoader";
 import DeleteDialog from "@/components/DeleteDialog";
 import ArchiveDialog from "@/components/ArchiveDialog";
 import BannerArchivedProjects from "@/components/BannerArchivedProjects";
+import translate from "@/services/translate";
 
 export default function Dashboard() {
 
@@ -40,6 +41,8 @@ export default function Dashboard() {
 
 
     const router = useRouter();
+    const { locale } = router;
+    let t = translate("dashboard", locale)
 
     useEffect(() => {
         setLoading(true)
@@ -222,12 +225,12 @@ export default function Dashboard() {
                 <Link href={'/'}><img src='/assets/logo.png' className="sm:w-35 sm:h-20" /></Link>
                 <div className="flex flex-row items-center">
                     <div className="details flex flex-col md:flex-row gap-2">
-                        <h5>Hi, {session.user.name}!</h5>
+                        <h5>{t.greetings}, {session.user.name}!</h5>
                         <h5>({session.user.email})</h5>
                     </div>
 
                     <div className="flex justify-center">
-                        <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>Sign Out</button>
+                        <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>{t.signOutButton}</button>
                     </div>
                 </div>
                 {/* <div className="flex justify-center">
@@ -236,8 +239,8 @@ export default function Dashboard() {
             </div>
             <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-4 pr-4`}>
                 <div className="flex flex-row w-full items-center justify-between gap-4 runded-sm border-2 border-gray-200 p-6">
-                 <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
-                        type="text" placeholder="Name Your Project"
+                    <input className="lg:text-4xl text-2xl font-bold bg-transparent h-16 mr-4 w-full text-gray-200 p-2"
+                        type="text" placeholder={t.nameProjectPlaceholder}
                         value={title}
                         disabled={archivedProject}
                         onChange={(e) => setTitle(e.target.value)}
@@ -270,7 +273,7 @@ export default function Dashboard() {
                 <div>
                     <ul className="flex lg:flex-row flex-col justify-between gap-4">
                         <li className="flex flex-col w-full space-y-4 p-4">
-                            <h2 className="text-center font-bold text-orange-400">TO DO</h2>
+                            <h2 className="text-center font-bold text-orange-400 uppercase">{t.todo}</h2>
                             <ul>
                                 {cardsCol1.map((task, key) => (
                                     <li key={key} className="flex items-center justify-center p-2">
@@ -288,8 +291,8 @@ export default function Dashboard() {
                                         </div>
                                     </li>
                                 ))}
-                                {!archivedProject &&<input className="text-center bg-transparent border-gray-200 w-full p-1 text-gray-100"
-                                    type="text" placeholder="Create New Task"
+                                {!archivedProject && <input className="text-center bg-transparent border-gray-200 w-full p-1 text-gray-100"
+                                    type="text" placeholder={t.createNewTaskPlaceholder}
                                     value={newTaskTitle}
                                     disabled={archivedProject}
                                     onChange={(e) => setNewTaskTitle(e.target.value)}
@@ -300,7 +303,7 @@ export default function Dashboard() {
 
                         </li>
                         <li className="flex flex-col w-full space-y-4 p-4">
-                            <h2 className="text-center font-bold text-blue-400">IN PROGRESS</h2>
+                            <h2 className="text-center font-bold text-blue-400 uppercase">{t.inProgress}</h2>
                             <ul>
                                 {cardsCol2.map((task, key) => (
                                     <li key={key} className="flex items-center justify-center p-2">
@@ -322,7 +325,7 @@ export default function Dashboard() {
                             </ul>
                         </li>
                         <li className="flex flex-col w-full space-y-4 p-4">
-                            <h2 className="text-center font-bold text-green-400" >DONE</h2>
+                            <h2 className="text-center font-bold text-green-400 uppercase" >{t.done}</h2>
                             <ul>
                                 {cardsCol3.map((task, key) => (
                                     <li key={key} className="flex items-center justify-center p-2">

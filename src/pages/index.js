@@ -132,7 +132,7 @@ function User({ session, handleSignOut }) {
                 onKeyDown={handleAddNewProject}
               />}
           </ul>
-          {(projects.length === 0) && <p className="text-xl text-center bg-transparent border-gray-200 text-gray-100">{t.noArchivedFound}</p>}
+          {(projects.length === 0 && archivedProjects) && <p className="text-xl text-center bg-transparent border-gray-200 text-gray-100">{t.noArchivedFound}</p>}
           <div className="flex justify-center">
             <button
               className="m-8 px-4 p-2 rounded-md bg-blue-800 text-gray-50 hover:bg-blue-700 w-full"

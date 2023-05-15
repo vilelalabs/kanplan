@@ -20,22 +20,22 @@ export default async function handler(req, res) {
         }
     }
 
-    // else if (req.method === 'PUT' && reset === "true") {
-    //     console.log('reset')
-    //     try {
-    //         const updatedProject = await prisma.project.update({
-    //             where: {
-    //                 id: parseInt(id)
-    //             },
-    //             data: {
-    //                 archived: false
-    //             }
-    //         })
-    //         res.status(200).json(updatedProject)
-    //     } catch (error) {
-    //         res.status(400).json({ message: error.message })
-    //     }
-    // }
+    else if (req.method === 'PUT' && reset === "true") {
+        console.log('reset')
+        try {
+            const updatedProject = await prisma.project.update({
+                where: {
+                    id: parseInt(id)
+                },
+                data: {
+                    archived: false
+                }
+            })
+            res.status(200).json(updatedProject)
+        } catch (error) {
+            res.status(400).json({ message: error.message })
+        }
+    }
 
     else if (req.method === 'PUT' && req.body.title) {
         const { title } = req.body

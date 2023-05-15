@@ -20,6 +20,7 @@ export default async function handler(req, res) {
         }
     }
 
+    // RESET
     else if (req.method === 'PUT' && reset === "true") {
         console.log('reset')
         try {
@@ -54,7 +55,7 @@ export default async function handler(req, res) {
             res.status(400).json({ message: error.message })
         }
     }
-    else {
+    else  if (req.method === 'PUT'){
         console.log('archive')
         try {
             const archivedProject = await prisma.project.update({

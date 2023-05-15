@@ -79,6 +79,11 @@ function User({ session, handleSignOut }) {
     }
   }
 
+  async function handleSetLocalStorage(key) {
+    localStorage.setItem("selectedProjectIndex", key)
+    localStorage.setItem("archivedProject", archivedProjects)
+  }
+
   return (
     <div className="flex flex-col ">
       <Head>
@@ -110,12 +115,12 @@ function User({ session, handleSignOut }) {
           <ul className=" text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
               <li key={key} className="flex items-center text-center justify-center space-x-4">
-                <Link href={`/dashboard`} onClick={() => {
-                  localStorage.setItem("selectedProjectIndex", key)
-                  localStorage.setItem("archivedProject", archivedProjects)
+                <p className="cursor-pointer"  href={``} onClick={async() => {
+                  await handleSetLocalStorage(key)
+                  router.push('/dashboard')
                 }}>
                   {project.title}
-                </Link>
+                </p>
               </li>
             ))}
             {!archivedProjects &&

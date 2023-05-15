@@ -10,11 +10,8 @@ import { signIn, getSession } from "next-auth/react"
 import { useFormik } from "formik";
 import login_validate from "../lib/validate";
 import { useRouter } from "next/router";
-
 import ClockLoader from "react-spinners/ClockLoader";
-
-import enUS from "../../locales/login/en-US";
-import ptBR from "../../locales/login/pt-BR";
+import translate from "@/services/translate";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -23,18 +20,7 @@ export default function Login() {
     const router = useRouter();
     const {locale} = router;
     
-    let t;
-    switch (locale) {
-        case 'en-US':
-            t = enUS
-            break;
-        case 'pt-BR':
-            t = ptBR
-            break;
-        default:
-            t = enUS
-            break;
-    }
+    let t = translate("login", locale)
 
     //formik hook
     const formik = useFormik({

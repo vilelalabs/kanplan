@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
-import enUS from "../../locales/header/en-US";
-import ptBR from "../../locales/header/pt-BR";
+import translate from "@/services/translate";
 
 
 
@@ -8,20 +7,7 @@ export default function Header() {
     const router = useRouter();
     const { locale } = router;
 
-    let t;
-    switch (locale) {
-        case 'en-US':
-            t = enUS
-            break;
-        case 'pt-BR':
-            t = ptBR
-            break;
-        default:
-            t = enUS
-            break;
-    }
-
-
+    let t = translate("header", locale)
 
     return (
         <>

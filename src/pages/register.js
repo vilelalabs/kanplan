@@ -9,28 +9,14 @@ import { useFormik } from "formik";
 import {registerValidate} from "../lib/validate";
 import { useRouter } from "next/router";
 import ClockLoader from "react-spinners/ClockLoader";
-import enUS from "../../locales/register/en-US";
-import ptBR from "../../locales/register/pt-BR";
-
+import translate from "@/services/translate";
 
 export default function Register() {
     const [showPassword, setShowPassword] = useState({ password: false, cpassword: false });
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const {locale} = router;
-    let t;
-    switch (locale) {
-        case 'en-US':
-            t = enUS
-            break;
-        case 'pt-BR':
-            t = ptBR
-            break;
-        default:
-            t = enUS
-            break;
-    }
-
+    let t = translate("register", locale)
 
     const formik = useFormik({
         initialValues: {

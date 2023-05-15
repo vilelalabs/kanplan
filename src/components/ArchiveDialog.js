@@ -1,7 +1,5 @@
 import { useRouter } from "next/router";
-import enUS from "../../locales/archiveDialog/en-US";
-import ptBR from "../../locales/archiveDialog/pt-BR";
-
+import translate from "@/services/translate";
 import { FaExclamation } from "react-icons/fa";
 
 
@@ -9,18 +7,8 @@ export default function ArchiveDialog(props) {
     const router = useRouter();
     const { locale } = router;
 
-    let t;
-    switch (locale) {
-        case 'en-US':
-            t = enUS
-            break;
-        case 'pt-BR':
-            t = ptBR
-            break;
-        default:
-            t = enUS
-            break;
-    }
+    let t = translate("archiveDialog", locale)
+    
     const handleResult = (res) => {
         props.setArchiveResult(res)
         props.setShowArchiveDialog(false)

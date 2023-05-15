@@ -9,12 +9,27 @@ import { useFormik } from "formik";
 import {registerValidate} from "../lib/validate";
 import { useRouter } from "next/router";
 import ClockLoader from "react-spinners/ClockLoader";
+import enUS from "../../locales/register/en-US";
+import ptBR from "../../locales/register/pt-BR";
 
 
 export default function Register() {
     const [showPassword, setShowPassword] = useState({ password: false, cpassword: false });
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const {locale} = router;
+    let t;
+    switch (locale) {
+        case 'en-US':
+            t = enUS
+            break;
+        case 'pt-BR':
+            t = ptBR
+            break;
+        default:
+            t = enUS
+            break;
+    }
 
 
     const formik = useFormik({
@@ -64,12 +79,12 @@ export default function Register() {
                 </div>
                 {/*form*/}
                 <form className="flex flex-col gap-5" onSubmit={formik.handleSubmit}>
-                    <h1 className="text-2xl font-bold text-center"> Register </h1>
+                    <h1 className="text-2xl font-bold text-center"> {t.registerTitle} </h1>
                     <div className={`${styles.input_group} ${formik.errors.username && formik.touched.username?'border-rose-600':''}`}>
                         <input
                             type="text"
                             name="username"
-                            placeholder="username"
+                            placeholder={t.usernamePlaceholder}
                             className={styles.input_text}
                             {...formik.getFieldProps('username')}
                         />
@@ -93,7 +108,7 @@ export default function Register() {
                     <div className={`${styles.input_group} ${formik.errors.password && formik.touched.password?'border-rose-600':''}`}>                        <input
                             type={showPassword.password ? "text" : "password"}
                             name="password"
-                            placeholder="password"
+                            placeholder={t.passwordPlaceholder}
                             className={styles.input_text}
                             {...formik.getFieldProps('password')}
                         />
@@ -107,7 +122,7 @@ export default function Register() {
                     <div className={`${styles.input_group} ${formik.errors.cpassword && formik.touched.cpassword?'border-rose-600':''}`}>                        <input
                             type={showPassword.cpassword ? "text" : "password"}
                             name="cpassword"
-                            placeholder="confirm password"
+                            placeholder={t.confirmPasswordPlaceholder}
                             className={styles.input_text}
                             {...formik.getFieldProps('cpassword')}
                         />
@@ -121,13 +136,13 @@ export default function Register() {
                     {/*sign up buttons*/}
                     <div className="input-button">
                         <button type="submit" className={styles.button}>
-                            Sign Up
+                            {t.registerButton}
                         </button>
                     </div>
                 </form>
                 {/*bottom*/}
                 <p className="text-center text-gray-400">
-                    Have an account? <Link href={'/login'} className="text-blue-700">Sign In</Link>
+                    {t.haveAccount} <Link href={'/login'} className="text-blue-700">{t.signIn}</Link>
                 </p>
                 {loading &&
                     <span className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">

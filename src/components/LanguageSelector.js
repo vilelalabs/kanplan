@@ -13,7 +13,7 @@ export default function LanguageSelector() {
     };
 
     return (
-        <div className="flex justify-between items-center gap-4">
+        <div className="mx-4 sm:flex justify-between items-center gap-4">
             <div>
                 {t.message}:
             </div>

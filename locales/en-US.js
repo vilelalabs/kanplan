@@ -60,6 +60,6 @@ export default {
         saveButton: "Save",
     },
     languageSelector: {
-        message: "Select language",
+        message: "Sel. language",
     }
 }

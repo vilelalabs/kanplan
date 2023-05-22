@@ -14,7 +14,7 @@ export default function LanguageSelector() {
 
     return (
         <div className="flex justify-between items-center gap-4">
-            <div className>
+            <div>
                 {t.message}:
             </div>
             <select

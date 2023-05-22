@@ -42,7 +42,7 @@ export default {
         greetings: "Olá",
         signOutButton: "Sair",
         noArchivedFound: "Nenhum projeto arquivado encontrado!",
-        nameProjectPlaceholder: "Escreva aqui o nome do seu projeto",
+        nameProjectPlaceholder: "Nomeie seu projeto aqui",
         buttonSeeArchived: "Ver projetos arquivados",
         buttonSeeActive: "Ver projetos ativos",
     },

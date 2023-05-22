@@ -111,7 +111,7 @@ function User({ session, handleSignOut }) {
         <Header />
         {archivedProjects && <BannerArchivedProjects />}
         <div>
-          <ul className=" text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4">
+          <ul className=" text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4 w-full">
             {projects.map((project, key) => (
               <li key={key} className="flex items-center text-center justify-center space-x-4">
                 <p className="cursor-pointer" href={``} onClick={async () => {
@@ -123,7 +123,7 @@ function User({ session, handleSignOut }) {
               </li>
             ))}
             {!archivedProjects &&
-              <input className="text-center bg-transparent border-gray-200 text-gray-100"
+              <input className="text-center bg-transparent border-gray-200 text-gray-100 w-96"
                 type="text" placeholder={t.nameProjectPlaceholder}
                 value={newProjectTitle}
                 disabled={archivedProjects}

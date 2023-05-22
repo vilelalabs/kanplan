@@ -58,5 +58,8 @@ export default {
         nameTaskPlaceholder: "Name your task",
         descriptionPlaceholder: "Description",
         saveButton: "Save",
+    },
+    languageSelector: {
+        message: "Select language",
     }
 }

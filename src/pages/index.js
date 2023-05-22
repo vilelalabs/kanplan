@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { getProjects, postProjects } from "../services/projects"
 import Header from "@/components/Header"
 import BannerArchivedProjects from "@/components/BannerArchivedProjects"
+import LanguageSelector from "@/components/LanguageSelector"
 import { getSession, useSession, signOut } from "next-auth/react"
 import ClockLoader from "react-spinners/ClockLoader";
 import translate from "@/services/translate";
@@ -90,23 +91,21 @@ function User({ session, handleSignOut }) {
         <title>Kanplan | Home</title>
       </Head>
 
-      <div className="flex justify-between items-center text-center mx-4 py-2">
+      <div className="flex items-center text-center mx-4 py-2">
         <Link href={'/'}><img src='/assets/logo.png' className="sm:w-35 sm:h-20" /></Link>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center justify-between w-full">
           <div className="details flex flex-col md:flex-row gap-2">
             <h5>{t.greetings}, {session.user.name}!</h5>
             <h5>({session.user.email})</h5>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center items-center gap-4">
+            <LanguageSelector />
             <button
               className="ml-4 px-4 py-1 rounded-md bg-blue-800 text-gray-50 hover:bg-blue-700"
               onClick={handleSignOut}>{t.signOutButton}</button>
           </div>
         </div>
-        {/* <div className="flex justify-center">
-          <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>
-        </div> */}
       </div>
       <main className="flex h-screen flex-col items-center space-y-16 sm:pt-24">
         <Header />
@@ -115,7 +114,7 @@ function User({ session, handleSignOut }) {
           <ul className=" text-xl sm:text-2xl flex flex-col items-center justify-center space-y-4">
             {projects.map((project, key) => (
               <li key={key} className="flex items-center text-center justify-center space-x-4">
-                <p className="cursor-pointer"  href={``} onClick={async() => {
+                <p className="cursor-pointer" href={``} onClick={async () => {
                   await handleSetLocalStorage(key)
                   router.push('/dashboard')
                 }}>

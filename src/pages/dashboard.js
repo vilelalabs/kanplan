@@ -14,6 +14,7 @@ import ClockLoader from "react-spinners/ClockLoader";
 import DeleteDialog from "@/components/DeleteDialog";
 import ArchiveDialog from "@/components/ArchiveDialog";
 import BannerArchivedProjects from "@/components/BannerArchivedProjects";
+import LanguageSelector from "@/components/LanguageSelector";
 import translate from "@/services/translate";
 
 export default function Dashboard() {
@@ -221,21 +222,21 @@ export default function Dashboard() {
             <Head>
                 <title>Kanplan | Dashboard</title>
             </Head>
-            <div className="flex justify-between items-center text-center mx-4 py-2">
+            <div className="flex items-center text-center mx-4 py-2">
                 <Link href={'/'}><img src='/assets/logo.png' className="sm:w-35 sm:h-20" /></Link>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center justify-between w-full">
                     <div className="details flex flex-col md:flex-row gap-2">
                         <h5>{t.greetings}, {session.user.name}!</h5>
                         <h5>({session.user.email})</h5>
                     </div>
 
-                    <div className="flex justify-center">
-                        <button className="ml-4 px-4 py-1 rounded-sm bg-blue-700 text-gray-50" onClick={handleSignOut}>{t.signOutButton}</button>
+                    <div className="flex justify-center items-center gap-4">
+                        <LanguageSelector />
+                        <button
+                            className="ml-4 px-4 py-1 rounded-md bg-blue-800 text-gray-50 hover:bg-blue-700"
+                            onClick={handleSignOut}>{t.signOutButton}</button>
                     </div>
                 </div>
-                {/* <div className="flex justify-center">
-          <Link href={'/profile'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Profile</Link>
-        </div> */}
             </div>
             <main className={`flex min-h-screen flex-col space-y-16 pt-24 pl-4 pr-4`}>
                 <div className="flex flex-row w-full items-center justify-between gap-4 runded-sm border-2 border-gray-200 p-6">

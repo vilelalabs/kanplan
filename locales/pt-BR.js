@@ -67,6 +67,14 @@ export default {
         descriptionPlaceholder: "Descrição",
         saveButton: "Salvar",
     },
+    privacyUpdate: {
+        title: "Atualizamos nossa Política de Privacidade",
+        message: "Para continuar usando o Kanplan, leia e aceite a nossa Política de Privacidade. Ela explica quais dados guardamos, para quê e como acessá-los ou apagá-los.",
+        read: "Ler a Política de Privacidade",
+        accept: "Li e concordo",
+        signOut: "Sair",
+        error: "Não foi possível salvar sua resposta. Tente de novo.",
+    },
     languageSelector: {
         message: "Sel. idioma",
     }

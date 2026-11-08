@@ -39,6 +39,10 @@ model User {
   sessions      Session[]
   password      String?
   Project       Project[]
+  // LGPD: privacy policy version accepted, when, and how (see src/lib/privacy.js)
+  privacyPolicyVersion String?
+  privacyPolicyAt      DateTime?
+  privacyPolicySource  String?
 }
 
 model Account {

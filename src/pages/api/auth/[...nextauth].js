@@ -9,8 +9,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/services/prismaClient";
 
 import { compare } from "bcryptjs";
+import { privacyRecord } from "@/lib/privacy";
 
-export default NextAuth({
+export const authOptions = {
     session: {
         strategy: "jwt",
         maxAge: 3000,
@@ -49,4 +50,13 @@ export default NextAuth({
         })
     ],
     secret: process.env.NEXTAUTH_SECRET,
-})
+    events: {
+        // first sign-in with Google/GitHub: the account is created by the adapter, under the
+        // privacy notice of the login page (sign-ups by e-mail are recorded in /api/auth/signup)
+        async createUser({ user }) {
+            await prisma.user.update({ where: { id: user.id }, data: privacyRecord("signin-notice") })
+        },
+    },
+}
+
+export default NextAuth(authOptions)

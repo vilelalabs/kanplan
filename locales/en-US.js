@@ -66,6 +66,14 @@ export default {
         descriptionPlaceholder: "Description",
         saveButton: "Save",
     },
+    privacyUpdate: {
+        title: "We updated our Privacy Policy",
+        message: "To keep using Kanplan, please read and accept our Privacy Policy. It explains what data we keep, why, and how to access or delete it.",
+        read: "Read the Privacy Policy",
+        accept: "I have read and agree",
+        signOut: "Sign out",
+        error: "Could not save your answer. Please try again.",
+    },
     languageSelector: {
         message: "Sel. language",
     }

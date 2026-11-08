@@ -1,50 +1,37 @@
 import { prisma } from "@/services/prismaClient";
+import { requireUser, ownProject } from "@/lib/server/auth";
 
+// POST { projectId } lists the tasks of one of the user's projects;
+// POST { projectId, title } creates a task in it.
 export default async function handler(req, res) {
-    if (!req.body) {
-        return res.status(400).json({ message: 'Invalid Request.' })
+    if (req.method !== 'POST') {
+        return res.status(405).json({ message: 'Method not allowed.' })
     }
 
-    let userId;
+    const user = await requireUser(req, res)
+    if (!user) return
 
-    if (req.body.email) {
-        const user = await prisma.user.findUnique({
-            where: {
-                email: req.body.email
-            }
+    const project = await ownProject(user, req.body?.projectId)
+    if (!project) {
+        return res.status(404).json({ message: 'Project not found.' })
+    }
+
+    const title = typeof req.body?.title === 'string' ? req.body.title.trim() : ''
+
+    if (!title) {
+        const tasks = await prisma.task.findMany({
+            orderBy: { id: 'asc' },
+            where: { projectId: project.id }
         })
-        if (!user) return res.status(404).json({ message: 'User not found' })
-        userId = user.id;
+        return res.status(200).json(tasks)
     }
 
-
-    if (req.method === 'POST' && !req.body.title) {
-        const tasks = await prisma.task.findMany(
-            {
-                orderBy: {
-                    id: 'asc'
-                },
-                where: {
-                    projectId: req.body.projectId
-                }
-            }
-        )
-        if (!tasks) return res.status(404).json({ message: 'Tasks not found' })
-
-        res.status(200).json(tasks)
-    }
-
-    else if (req.method === 'POST') {
-
-        const task = await prisma.task.create({
-            data: {
-                title: req.body.title,
-                projectId: req.body.projectId,
-                description: ''
-            }
-        })
-        res.status(201).json(task)
-
-    }
-
+    const task = await prisma.task.create({
+        data: {
+            title,
+            projectId: project.id,
+            description: ''
+        }
+    })
+    return res.status(201).json(task)
 }

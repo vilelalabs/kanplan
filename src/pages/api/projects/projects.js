@@ -1,44 +1,32 @@
 import { prisma } from "@/services/prismaClient";
+import { requireUser } from "@/lib/server/auth";
 
+// POST without title: the signed-in user's projects with their tasks.
+// POST with title: creates a project for the signed-in user.
+// The user always comes from the session (an e-mail in the body is ignored).
 export default async function handler(req, res) {
-    if (!req.body) {
-        return res.status(400).json({ message: 'Invalid Request.' })
+    if (req.method !== 'POST') {
+        return res.status(405).json({ message: 'Method not allowed.' })
     }
 
-    let userId;
+    const user = await requireUser(req, res)
+    if (!user) return
 
-    const user = await prisma.user.findUnique({
-        where: {
-            email: req.body.email
+    const title = typeof req.body?.title === 'string' ? req.body.title.trim() : ''
+
+    if (!title) {
+        const projects = await prisma.project.findMany({
+            where: { userId: user.id },
+            include: { tasks: true },
+        })
+        return res.status(200).json(projects)
+    }
+
+    const project = await prisma.project.create({
+        data: {
+            title,
+            userId: user.id
         }
     })
-    if (!user) return res.status(404).json({ message: 'User not found' })
-    userId = user.id;
-
-    if (req.method === 'POST' && !req.body.title) {
-        const projects = await prisma.project.findMany({
-            where: {
-                userId: userId
-            }
-        })
-
-        if (!projects) return res.status(404).json({ message: 'Projects not found' })
-        const tasks = await prisma.task.findMany()
-        if (!tasks) return res.status(404).json({ message: 'Tasks not found' })
-
-        projects.forEach(project => {
-            project.tasks = tasks.filter(task => task.projectId === project.id)
-        })
-        res.status(200).json(projects)
-    }
-
-    else if (req.method === 'POST') {
-        const project = await prisma.project.create({
-            data: {
-                title: req.body.title,
-                userId: userId
-            }
-        })
-        res.status(201).json(project)
-    }
+    return res.status(201).json(project)
 }

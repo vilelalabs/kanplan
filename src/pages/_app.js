@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 
 import { Poppins } from 'next/font/google'
 import { SessionProvider } from 'next-auth/react'
+import PrivacyGate from '@/components/PrivacyGate'
 
 // Self-hosted by next/font at build time: visitors' browsers never call Google
 // Fonts (no IP sent to a third party, see the privacy policy). Regular weight
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }) {
       `}</style>
       <SessionProvider session={pageProps.session}>
         <Component {...pageProps} />
+        <PrivacyGate />
       </SessionProvider>
     </>
   )

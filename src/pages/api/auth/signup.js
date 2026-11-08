@@ -1,5 +1,6 @@
 import { hash } from "bcryptjs";
 import { prisma } from "@/services/prismaClient";
+import { privacyRecord } from "@/lib/privacy";
 
 export default async function handler(req, res) {
 
@@ -21,7 +22,8 @@ export default async function handler(req, res) {
                 data: {
                     name: username,
                     email: email,
-                    password: await hash(password, 12)
+                    password: await hash(password, 12),
+                    ...privacyRecord("signup-checkbox"),
                 }
             })
             //never send the password hash back

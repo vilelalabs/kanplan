@@ -6,7 +6,8 @@ export default async function handler(req, res) {
     try {
         if (req.method === 'POST') {
             if(!req.body) return res.status(400).json({ message: 'No form data.' })
-            const { username, email, password } = req.body //username is 'name' in database
+            const { username, email, password, acceptPrivacy } = req.body //username is 'name' in database
+            if (acceptPrivacy !== true) return res.status(422).json({ message: 'The Privacy Policy must be accepted.' })
 
             //check for duplicated users
             const checkexisting = await prisma.user.findUnique({
@@ -23,7 +24,8 @@ export default async function handler(req, res) {
                     password: await hash(password, 12)
                 }
             })
-            res.status(201).json(user)
+            //never send the password hash back
+            res.status(201).json({ id: user.id, name: user.name, email: user.email })
         } else {
             res.status(404).json({ message: 'Method not allowed.' })
         }

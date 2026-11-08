@@ -24,6 +24,7 @@ export default function Register() {
             email: "",
             password: "",
             cpassword: "",
+            acceptPrivacy: false,
         },
         validate: registerValidate,
         onSubmit,
@@ -119,6 +120,21 @@ export default function Register() {
                         </span>
                     </div>
                     {/* {formik.errors.cpassword && formik.touched.cpassword? <span className="text-red-500 text-sm">{formik.errors.cpassword}</span> : null} */}
+                    <div className="flex flex-col gap-1 text-left">
+                        <label className="flex items-start gap-3 text-sm text-gray-300 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                name="acceptPrivacy"
+                                className="mt-1 h-4 w-4 shrink-0 accent-blue-700 cursor-pointer"
+                                {...formik.getFieldProps({ name: 'acceptPrivacy', type: 'checkbox' })}
+                            />
+                            <span>
+                                {t.acceptPrivacy}{" "}
+                                <Link href={'/privacy'} target="_blank" className="text-blue-700 hover:underline">{t.privacyLink}</Link>.
+                            </span>
+                        </label>
+                        {formik.errors.acceptPrivacy && formik.touched.acceptPrivacy ? <span className="text-rose-600 text-sm">{t.acceptPrivacyRequired}</span> : null}
+                    </div>
                     {/*sign up buttons*/}
                     <div className="input-button">
                         <button type="submit" className={styles.button}>

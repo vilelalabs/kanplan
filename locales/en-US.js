@@ -27,6 +27,9 @@ export default {
         signInWith: "Sign in with",
         noAccount: "Don't have an account?",
         signUp: "Sign up",
+        privacyNotice: "By signing in, you confirm that you have read our",
+        privacyLink: "Privacy Policy",
+        cookiesNotice: "We only use essential cookies to keep you signed in.",
     },
     register: {
         registerTitle: "Register",
@@ -36,6 +39,9 @@ export default {
         registerButton: "Sign up",
         haveAccount: "Have an account?",
         signIn: "Sign in",
+        acceptPrivacy: "I have read and agree to the",
+        privacyLink: "Privacy Policy",
+        acceptPrivacyRequired: "You need to accept the Privacy Policy to create an account.",
     },
     index: {
         greetings: "Hi",
@@ -44,6 +50,7 @@ export default {
         nameProjectPlaceholder: "Write Here Your Project Name",
         buttonSeeArchived: "See Archived Projects",
         buttonSeeActive: "See Active Projects",
+        privacyLink: "Privacy Policy",
     },
     dashboard: {
         greetings: "Hi",

@@ -53,5 +53,10 @@ export function registerValidate(values) {
         errors.cpassword = "Passwords do not match!"
     }
 
+    //LGPD: the Privacy Policy must be accepted (checkbox, unchecked by default)
+    if (values.acceptPrivacy !== true) {
+        errors.acceptPrivacy = "Required";
+    }
+
     return errors;
 }

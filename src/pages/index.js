@@ -43,6 +43,9 @@ function Guest() {
       <div className="flex justify-center">
         <Link href={'/login'} className='mt-5 px-10 py-1 rounded-sm bg-blue-700 text-gray-50' >Sign In</Link>
       </div>
+      <div className="flex justify-center mt-8">
+        <Link href={'/privacy'} className="text-sm text-gray-400 hover:text-gray-200 underline">Privacy Policy</Link>
+      </div>
     </main>
   )
 }
@@ -138,6 +141,9 @@ function User({ session, handleSignOut }) {
               onClick={() => { setArchivedProjects(!archivedProjects) }}>
               {archivedProjects ? t.buttonSeeActive : t.buttonSeeArchived}
             </button>
+          </div>
+          <div className="flex justify-center">
+            <Link href={'/privacy'} className="text-sm text-gray-400 hover:text-gray-200 underline">{t.privacyLink}</Link>
           </div>
         </div>
       </main>

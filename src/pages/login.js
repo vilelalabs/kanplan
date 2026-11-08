@@ -119,6 +119,11 @@ export default function Login() {
                         <button type="button" className={styles.button_custom} onClick={handleGithubSignin}>{t.signInWith} Github <Image src={'/assets/github.svg'} width={25} height={25} alt={'google logo'} /></button>
                     </div>
                 </form>
+                <p className="text-center text-sm text-gray-400">
+                    {t.privacyNotice}{" "}
+                    <Link href={'/privacy'} className="text-blue-700 hover:underline">{t.privacyLink}</Link>.
+                    {" "}{t.cookiesNotice}
+                </p>
                 {/*bottom*/}
                 <p className="text-center text-gray-400">
                     {t.noAccount} <Link href={'/register'} className="text-blue-700">{t.signUp}</Link>
